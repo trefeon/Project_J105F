@@ -1,0 +1,54 @@
+lrwxrwxrwx root     root              2026-08-11 00:04 CACHE -> /dev/block/mmcblk0p24
+
+lrwxrwxrwx root     root              2026-08-11 00:04 FOTA_SIG -> /dev/block/mmcblk0p11
+
+lrwxrwxrwx root     root              2026-08-11 00:04 HIDDEN -> /dev/block/mmcblk0p26
+
+lrwxrwxrwx root     root              2026-08-11 00:04 KERNEL -> /dev/block/mmcblk0p20
+
+lrwxrwxrwx root     root              2026-08-11 00:04 PARAM -> /dev/block/mmcblk0p16
+
+lrwxrwxrwx root     root              2026-08-11 00:04 PERSDATA -> /dev/block/mmcblk0p23
+
+lrwxrwxrwx root     root              2026-08-11 00:04 PERSISTENT -> /dev/block/mmcblk0p22
+
+lrwxrwxrwx root     root              2026-08-11 00:04 RECOVERY -> /dev/block/mmcblk0p21
+
+lrwxrwxrwx root     root              2026-08-11 00:04 RESERVED2 -> /dev/block/mmcblk0p19
+
+lrwxrwxrwx root     root              2026-08-11 00:04 SBOOT -> /dev/block/mmcblk0p1
+
+lrwxrwxrwx root     root              2026-08-11 00:04 SBOOT2 -> /dev/block/mmcblk0p2
+
+lrwxrwxrwx root     root              2026-08-11 00:04 SYSTEM -> /dev/block/mmcblk0p25
+
+lrwxrwxrwx root     root              2026-08-11 00:04 efs -> /dev/block/mmcblk0p17
+
+lrwxrwxrwx root     root              2026-08-11 00:04 l_fixnv1 -> /dev/block/mmcblk0p3
+
+lrwxrwxrwx root     root              2026-08-11 00:04 l_fixnv2 -> /dev/block/mmcblk0p4
+
+lrwxrwxrwx root     root              2026-08-11 00:04 l_gdsp -> /dev/block/mmcblk0p9
+
+lrwxrwxrwx root     root              2026-08-11 00:04 l_ldsp -> /dev/block/mmcblk0p7
+
+lrwxrwxrwx root     root              2026-08-11 00:04 l_modem -> /dev/block/mmcblk0p8
+
+lrwxrwxrwx root     root              2026-08-11 00:04 l_runtimenv1 -> /dev/block/mmcblk0p12
+
+lrwxrwxrwx root     root              2026-08-11 00:04 l_runtimenv2 -> /dev/block/mmcblk0p13
+
+lrwxrwxrwx root     root              2026-08-11 00:04 l_warm -> /dev/block/mmcblk0p10
+
+lrwxrwxrwx root     root              2026-08-11 00:04 pm_sys -> /dev/block/mmcblk0p5
+
+lrwxrwxrwx root     root              2026-08-11 00:04 prodnv -> /dev/block/mmcblk0p18
+
+lrwxrwxrwx root     root              2026-08-11 00:04 rsvdfixnv1 -> /dev/block/mmcblk0p6
+
+lrwxrwxrwx root     root              2026-08-11 00:04 td_runtimenv1 -> /dev/block/mmcblk0p14
+
+lrwxrwxrwx root     root              2026-08-11 00:04 td_runtimenv2 -> /dev/block/mmcblk0p15
+
+lrwxrwxrwx root     root              2026-08-11 00:04 userdata -> /dev/block/mmcblk0p27
+

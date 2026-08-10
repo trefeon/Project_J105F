@@ -1,0 +1,72 @@
+add device 1: /dev/input/event1
+
+  name:     "sci-keypad"
+
+  events:
+
+    KEY (0001): 0072  0073  0074  00ac 
+
+  input props:
+
+    <none>
+
+add device 2: /dev/input/event4
+
+  name:     "headset-keyboard"
+
+  events:
+
+    KEY (0001): 0072  0073  00e2  0246 
+
+  input props:
+
+    <none>
+
+add device 3: /dev/input/event3
+
+  name:     "accelerometer_sensor"
+
+  events:
+
+    REL (0002): 0000  0001  0002  0007  0009 
+
+  input props:
+
+    <none>
+
+add device 4: /dev/input/event0
+
+  name:     "meta_event"
+
+  events:
+
+    REL (0002): 0006  0007 
+
+  input props:
+
+    <none>
+
+add device 5: /dev/input/event2
+
+  name:     "sec_touchscreen"
+
+  events:
+
+    KEY (0001): 009e  00fe 
+
+    ABS (0003): 002f  : value 0, min 0, max 9, fuzz 0, flat 0, resolution 0
+
+                0030  : value 0, min 0, max 255, fuzz 0, flat 0, resolution 0
+
+                0031  : value 0, min 0, max 255, fuzz 0, flat 0, resolution 0
+
+                0035  : value 0, min 0, max 480, fuzz 0, flat 0, resolution 0
+
+                0036  : value 0, min 0, max 800, fuzz 0, flat 0, resolution 0
+
+                0039  : value 0, min 0, max 65535, fuzz 0, flat 0, resolution 0
+
+  input props:
+
+    INPUT_PROP_DIRECT
+

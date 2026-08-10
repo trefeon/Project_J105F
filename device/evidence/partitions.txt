@@ -1,0 +1,72 @@
+major minor  #blocks  name
+
+
+
+ 253        0     524288 vnswap0
+
+ 179        0    7634944 mmcblk0
+
+ 179        1       2048 mmcblk0p1
+
+ 179        2       2048 mmcblk0p2
+
+ 179        3       1024 mmcblk0p3
+
+ 179        4       1024 mmcblk0p4
+
+ 179        5       1024 mmcblk0p5
+
+ 179        6       1024 mmcblk0p6
+
+ 179        7       4096 mmcblk0p7
+
+ 179        8      16384 mmcblk0p8
+
+ 179        9       4096 mmcblk0p9
+
+ 179       10       4096 mmcblk0p10
+
+ 179       11       1024 mmcblk0p11
+
+ 179       12       1024 mmcblk0p12
+
+ 179       13       1024 mmcblk0p13
+
+ 179       14       1024 mmcblk0p14
+
+ 179       15       1024 mmcblk0p15
+
+ 179       16       2048 mmcblk0p16
+
+ 179       17      20480 mmcblk0p17
+
+ 179       18       5120 mmcblk0p18
+
+ 179       19       6144 mmcblk0p19
+
+ 179       20      16384 mmcblk0p20
+
+ 179       21      16384 mmcblk0p21
+
+ 179       22       1024 mmcblk0p22
+
+ 179       23       9216 mmcblk0p23
+
+ 179       24     204800 mmcblk0p24
+
+ 179       25    2199552 mmcblk0p25
+
+ 179       26      40960 mmcblk0p26
+
+ 179       27    5054464 mmcblk0p27
+
+ 179       96       4096 mmcblk0rpmb
+
+ 179       64       4096 mmcblk0boot1
+
+ 179       32       4096 mmcblk0boot0
+
+ 179      128    3862528 mmcblk1
+
+ 179      129    3861504 mmcblk1p1
+

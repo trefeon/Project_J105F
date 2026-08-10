@@ -19,6 +19,7 @@
 | Build recipe | `downstreamkernel_prepare` / `downstreamkernel_package` pmOS helpers; `make ARCH=arm CC=gcc` + `dtbTool-sprd -s 2048` → dt.img; makedepends: `dtbtool-sprd devicepkg-dev mkbootimg msm-fb-refresher` | same APKBUILDs |
 | Firmware/blobs | Stock dump has full `/system` (incl. vendor HAL+possible wifi firmware); separate `android_vendor_sprd_gj105f` HALS | `reference/dumps/samsung_j1minilte_dump/system`, `reference/vendor/` |
 | Build machine | Windows host → **WSL2 Ubuntu** for pmbootstrap builds; **heimdall on Windows** for flashing | env |
+| **User's hardware** | **SM-J105F/DS (Indonesia, XID, dual-SIM) — CONFIRMED via live ADB/TWRP (2026-08-11):** 1 GB RAM (941 892 kB MemTotal), modem `SC9830i` (LTE-capable), board **SP8835EB** (5 DTBs extracted from its stock boot image — same board family as the 3G dump), firmware `J105FXXS0ARD2` (identical build to our cloned dump), kernel `3.10.65-9723235` (2018-04 build), CSC XID. Evidence: `device/evidence/` | live device |
 
 ---
 
@@ -31,6 +32,7 @@
 | 0.2 | Flash TWRP 3.0.3-0 (SM-J105) via Odin; **full backup → microSD**: EFS, BOOT, SYSTEM, DATA, CACHE | XDA 3545821; TWRP keeps `RECOVERY IS NOT SEAndroid...` warning — harmless | backup zips verified on PC |
 | 0.3 | Set up WSL2 Ubuntu 24.04; install `pmbootstrap` (pip); `pmbootstrap init` (own pmaports fork dir, arch=armv7, vendor=samsung) | pmbootstrap docs; keep default stable branch for first build | `pmbootstrap --version` ok |
 | 0.4 | Install **heimdall** on Windows; phone into Download Mode; `heimdall print-pit` → **PIT ground truth** (SYSTEM/userdata sizes!) | heimdall-frontend.net Windows build | PIT saved to repo `docs/` |
+| 0.5 | ~~Capture the user's stock BOOT image → extract DTBs~~ **DONE (2026-08-11):** boot/efs/recovery/modem raw images `dd`'d from TWRP → `device/evidence/stock-backup/`; **5 DTBs (`SP8835EB board`) extracted** → `.../stock-backup/dtb/` (SPRD dt.img format, 5 entries); these go into our kernel's `dt.img` | done via TWRP adb root shell | DTBs verified (FDT magic, sizes, board strings) |
 
 **Gate 0:** TWRP backup verified restorable + PIT captured + firmware/Odin in hand. **Brick risk is now ~0 (Odin + EFS backup).**
 
@@ -78,8 +80,8 @@
 ## 2. Decisions (with default)
 | ID | Decision | Default | Revisit when |
 |---|---|---|---|
-| D1 | Kernel base: archived-recipe kernel vs cm-14.1 3.10.100 | **Archived recipe (IKGapirov 3.10.106) for Phases 1–3** (known-good combo) → cm-14.1 swap in Phase 4.2 | Phase 1 gate passes/fails |
-| D2 | Install target: internal SYSTEM vs microSD rootfs (`--sdcard`) | Internal SYSTEM (classic pmOS) → switch to SD if PIT shows SYSTEM < ~1.5 GB | after Phase 0.4 PIT |
+| D1 | Kernel base: archived-recipe kernel vs cm-14.1 3.10.100 | **Archived recipe (IKGapirov 3.10.106) for Phases 1–3** (known-good combo) → cm-14.1 swap in Phase 4.2; **if LTE/SC9830A boot issue → use `j3xlte/j3xnlte_defconfig` (SC9830) as config base instead of the j1mini3g one** | Phase 1 gate passes/fails |
+| D2 | Install target: internal SYSTEM vs microSD rootfs (`--sdcard`) | **Internal SYSTEM — RESOLVED:** live partition sizes confirm SYSTEM = 2148 MB (mmcblk0p25), userdata 4935 MB, cache 197 MB → rootfs + XFCE fits in SYSTEM; keep SD-install as fallback | PIT/live check done |
 | D3 | UI: XFCE4 minimal vs Sxmo | **XFCE4 minimal** (fastest to working desktop); Sxmo as Phase 4 polish | Phase 3.2 RAM measurement |
 | D4 | Flash tool: heimdall vs TWRP | **TWRP first** (already flashed, interactive); heimdall as pmOS-native path | whichever fails |
 | D5 | Build host: WSL2 vs native Linux | **WSL2** (already on Windows); heimdall runs on Windows side (USB passthrough hassle avoided) | pmbootstrap issues in WSL2 → dual-boot/VM fallback |

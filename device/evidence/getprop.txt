@@ -1,0 +1,940 @@
+[audioflinger.bootsnd]: [0]
+
+[boot.sfbootcomplete]: [0]
+
+[camera.disable_zsl_mode]: [1]
+
+[conn.connectivity_change_delay]: [0]
+
+[dalvik.vm.dex2oat-Xms]: [64m]
+
+[dalvik.vm.dex2oat-Xmx]: [512m]
+
+[dalvik.vm.heapgrowthlimit]: [96m]
+
+[dalvik.vm.heapmaxfree]: [4m]
+
+[dalvik.vm.heapminfree]: [1m]
+
+[dalvik.vm.heapsize]: [128m]
+
+[dalvik.vm.heapstartsize]: [5m]
+
+[dalvik.vm.heaptargetutilization]: [0.75]
+
+[dalvik.vm.image-dex2oat-Xms]: [64m]
+
+[dalvik.vm.image-dex2oat-Xmx]: [64m]
+
+[dalvik.vm.isa.arm.features]: [div]
+
+[dalvik.vm.stack-trace-file]: [/data/anr/traces.txt]
+
+[debug.force_rtl]: [0]
+
+[debug.hwui.render_dirty_regions]: [false]
+
+[debug.sf.layerdump]: [0]
+
+[dev.bootcomplete]: [1]
+
+[dev.kies.sommode]: [TRUE]
+
+[dev.kiessupport]: [TRUE]
+
+[dev.knoxapp.running]: [false]
+
+[dev.ssrm.app.type]: [false]
+
+[dev.ssrm.appsync3p]: [false]
+
+[dev.ssrm.emergencymode]: [false]
+
+[dev.ssrm.init]: [1]
+
+[dev.ssrm.mode]: []
+
+[dev.ssrm.pst]: [267]
+
+[dev.ssrm.smart_switch]: [false]
+
+[dhcp.wlan0.dns1]: [8.8.8.8]
+
+[dhcp.wlan0.dns2]: [8.8.4.4]
+
+[dhcp.wlan0.dns3]: []
+
+[dhcp.wlan0.dns4]: []
+
+[dhcp.wlan0.domain]: [kingsignalAPP.com]
+
+[dhcp.wlan0.gateway]: [192.168.10.1]
+
+[dhcp.wlan0.ipaddress]: [192.168.10.7]
+
+[dhcp.wlan0.leasetime]: [172800]
+
+[dhcp.wlan0.mask]: [255.255.255.0]
+
+[dhcp.wlan0.mtu]: []
+
+[dhcp.wlan0.pid]: [1380]
+
+[dhcp.wlan0.reason]: [BOUND]
+
+[dhcp.wlan0.result]: [ok]
+
+[dhcp.wlan0.roaming]: [0]
+
+[dhcp.wlan0.server]: [192.168.10.1]
+
+[dhcp.wlan0.vendorInfo]: [\001\004CTC0]
+
+[drm.service.enabled]: [true]
+
+[gsm.current.phone-type]: [1,1]
+
+[gsm.network.type]: [Unknown,Unknown]
+
+[gsm.operator.alpha]: [,]
+
+[gsm.operator.iso-country]: [,]
+
+[gsm.operator.isroaming]: [false,false]
+
+[gsm.operator.numeric]: [,]
+
+[gsm.sim.operator.alpha]: [,]
+
+[gsm.sim.operator.iso-country]: [,]
+
+[gsm.sim.operator.numeric]: [,]
+
+[gsm.sim.state]: [ABSENT,ABSENT]
+
+[gsm.version.baseband1]: [J105FXXU0APG2]
+
+[gsm.version.baseband]: [J105FXXU0APG2]
+
+[gsm.version.ril-impl]: [Samsung RIL v3.0]
+
+[init.svc.BCS-daemon]: [running]
+
+[init.svc.DR-daemon]: [running]
+
+[init.svc.SMD-daemon]: [running]
+
+[init.svc.adbd]: [running]
+
+[init.svc.at_distributor]: [running]
+
+[init.svc.auditd]: [running]
+
+[init.svc.batterysrv]: [running]
+
+[init.svc.bootanim]: [stopped]
+
+[init.svc.cmd_services]: [stopped]
+
+[init.svc.compact_memory]: [stopped]
+
+[init.svc.cp_diskserver_l]: [running]
+
+[init.svc.debuggerd]: [running]
+
+[init.svc.dhcpcd_wlan0]: [running]
+
+[init.svc.download]: [running]
+
+[init.svc.drm]: [running]
+
+[init.svc.drsd]: [running]
+
+[init.svc.edmaudit]: [running]
+
+[init.svc.engpcclientlte]: [running]
+
+[init.svc.flash_recovery]: [stopped]
+
+[init.svc.fuse_extSdCard]: [stopped]
+
+[init.svc.gpsd]: [running]
+
+[init.svc.healthd]: [running]
+
+[init.svc.hprofsdelete]: [stopped]
+
+[init.svc.installd]: [running]
+
+[init.svc.keystore]: [running]
+
+[init.svc.lmkd]: [running]
+
+[init.svc.logd]: [running]
+
+[init.svc.macloader]: [stopped]
+
+[init.svc.media]: [running]
+
+[init.svc.mobex-daemon]: [running]
+
+[init.svc.modem_control]: [running]
+
+[init.svc.modemd]: [running]
+
+[init.svc.netd]: [running]
+
+[init.svc.p2p_supplicant]: [running]
+
+[init.svc.powersnd]: [stopped]
+
+[init.svc.prepare_param]: [stopped]
+
+[init.svc.refnotify_l]: [running]
+
+[init.svc.ril-daemon1]: [running]
+
+[init.svc.ril-daemon]: [running]
+
+[init.svc.scs]: [stopped]
+
+[init.svc.sdcard]: [stopped]
+
+[init.svc.servicemanager]: [running]
+
+[init.svc.smd_symlink]: [stopped]
+
+[init.svc.surfaceflinger]: [running]
+
+[init.svc.swapon]: [stopped]
+
+[init.svc.ueventd]: [running]
+
+[init.svc.vold]: [running]
+
+[init.svc.wcnd]: [running]
+
+[init.svc.zygote]: [running]
+
+[installd.sdcard_manipulate_done]: [1]
+
+[keyguard.no_require_sim]: [true]
+
+[lmk.autocalc]: [false]
+
+[logd.auditd]: [false]
+
+[media.dump.path]: [/data/local/media/]
+
+[media.dump.switch]: [0x0]
+
+[net.bt.name]: [Android]
+
+[net.change]: [net.dns2]
+
+[net.dns1]: [8.8.8.8]
+
+[net.dns2]: [8.8.4.4]
+
+[net.hostname]: [android-feae433eaefa5377]
+
+[net.knoxscep.version]: [2.0.1]
+
+[net.knoxsso.version]: [1.0.0]
+
+[net.knoxvpn.version]: [2.2.2]
+
+[net.qtaguid_enabled]: [1]
+
+[net.tcp.default_init_rwnd]: [60]
+
+[persist.audio.allsoundmute]: [0]
+
+[persist.audio.cpufreq]: [350000]
+
+[persist.audio.finemediavolume]: [0]
+
+[persist.audio.globaleffect]: [1]
+
+[persist.audio.headsetsysvolume]: [9]
+
+[persist.audio.hphonesysvolume]: [9]
+
+[persist.audio.mpseek]: [0]
+
+[persist.audio.mysound]: [1]
+
+[persist.audio.ringermode]: [2]
+
+[persist.audio.soundalivefxsec]: [1]
+
+[persist.audio.stereospeaker]: [0]
+
+[persist.audio.sysvolume]: [9]
+
+[persist.audio.uhqa]: [0]
+
+[persist.ini.connectivity.prodnv]: [0]
+
+[persist.modem.l.cs]: [0]
+
+[persist.modem.l.enable]: [1]
+
+[persist.modem.l.nvp]: [l_]
+
+[persist.modem.l.ps]: [1]
+
+[persist.modem.l.rsim]: [1]
+
+[persist.modem.lf.enable]: [0]
+
+[persist.modem.lf.nvp]: [wl_]
+
+[persist.modem.t.enable]: [0]
+
+[persist.modem.t.nvp]: [g_]
+
+[persist.modem.tl.enable]: [0]
+
+[persist.modem.tl.nvp]: [tl_]
+
+[persist.msms.phone_count]: [1]
+
+[persist.msms.phone_default]: [0]
+
+[persist.radio.add_power_save]: [1]
+
+[persist.radio.apm_sim_not_pwdn]: [1]
+
+[persist.radio.calldefault.simid]: [0]
+
+[persist.radio.dataprefer.slotId]: [0]
+
+[persist.radio.defdataSIMchange]: [true]
+
+[persist.radio.initphone-type]: [1]
+
+[persist.radio.multisim.config]: [dsds]
+
+[persist.radio.plmnname_1]: []
+
+[persist.radio.plmnname_2]: []
+
+[persist.radio.ssda.mode]: [fdd-csfb]
+
+[persist.radio.ssda.testmode1]: [10]
+
+[persist.radio.ssda.testmode]: [6]
+
+[persist.ril.ims.eutranParam]: [0]
+
+[persist.ril.ims.pdnFailCause]: [0]
+
+[persist.ril.ims.utranParam]: [0]
+
+[persist.ril.xcap.pdnFailCause]: [0]
+
+[persist.security.ams.enforcing]: [1]
+
+[persist.service.agps.network]: [4g]
+
+[persist.service.bdroid.version]: [4.1]
+
+[persist.storage.type]: [2]
+
+[persist.support.cphsfirst]: [false]
+
+[persist.support.oplpnn]: [true]
+
+[persist.sys.apr.autoupload]: [1]
+
+[persist.sys.apr.intervaltime]: [1]
+
+[persist.sys.apr.testgroup]: [CSLAB]
+
+[persist.sys.bsservice.enable]: [1]
+
+[persist.sys.clssprld1]: [830]
+
+[persist.sys.clssprld2]: [570]
+
+[persist.sys.cmdservice.enable]: [disable]
+
+[persist.sys.country]: [US]
+
+[persist.sys.dalvik.vm.lib.2]: [libart.so]
+
+[persist.sys.drs.date]: [Mon Apr 23 13:33:37 KST 2018]
+
+[persist.sys.engpc.disable]: [0]
+
+[persist.sys.language]: [en]
+
+[persist.sys.localevar]: []
+
+[persist.sys.modem.diag]: [,gser]
+
+[persist.sys.profiler_ms]: [0]
+
+[persist.sys.setupwizard]: [FINISH]
+
+[persist.sys.silent]: [0]
+
+[persist.sys.sprd.modemreset]: [1]
+
+[persist.sys.sprd.wcnreset]: [1]
+
+[persist.sys.ssrm_unbox_cnt]: [2]
+
+[persist.sys.storage_preload]: [2]
+
+[persist.sys.support.vt]: [false]
+
+[persist.sys.thermal.enable]: [1]
+
+[persist.sys.timezone]: [Asia/Jakarta]
+
+[persist.sys.ui.hw]: [false]
+
+[persist.sys.usb.config]: [mtp,adb]
+
+[persist.sys.webview.vmsize]: [123422160]
+
+[persist.ttydev]: [ttyVUART0]
+
+[qemu.hw.mainkeys]: [1]
+
+[ril.CompleteMsg]: [01]
+
+[ril.ICC_TYPE]: [0,0]
+
+[ril.RildInit]: [1,1]
+
+[ril.approved_codever]: [none]
+
+[ril.approved_cscver]: [none]
+
+[ril.approved_modemver]: [none]
+
+[ril.atd_status]: [1_1_0]
+
+[ril.captive.selected]: [false]
+
+[ril.ecclist00]: [112,911,999,000,08,110,118,119]
+
+[ril.ecclist10]: [112,911,999,000,08,110,118,119]
+
+[ril.hasisim]: [0]
+
+[ril.hw_ver2]: [MP 0.300]
+
+[ril.hw_ver]: [MP 0.300]
+
+[ril.model_id2]: [BASE  Version:  ]
+
+[ril.model_id]: [BASE  Version:  ]
+
+[ril.modem.board2]: [SC9830i]
+
+[ril.modem.board]: [SC9830i]
+
+[ril.official_cscver]: [J105FOLE0ARD2]
+
+[ril.product_code2]: [SM-J105FZKDXID]
+
+[ril.product_code]: [SM-J105FZKDXID]
+
+[ril.radiostate]: [0]
+
+[ril.rfcal_date2]: [2017.03.21]
+
+[ril.rfcal_date]: [2017.03.21]
+
+[ril.rildreset]: [768]
+
+[ril.sales_code]: [XID]
+
+[ril.serialnumber]: [RR8J30F45KL]
+
+[ril.servicestate]: [3,3]
+
+[ril.subinfo]: [0:2147483643,1:2147483644]
+
+[ril.sw_ver2]: [J105FXXU0APG2]
+
+[ril.sw_ver]: [J105FXXU0APG2]
+
+[rild.libpath2]: [/system/lib/libsec-ril-dsds.so]
+
+[rild.libpath]: [/system/lib/libsec-ril.so]
+
+[ro.adb.qemud]: [1]
+
+[ro.adb.secure]: [1]
+
+[ro.allow.mock.location]: [0]
+
+[ro.astcenc.astcsupport]: [0]
+
+[ro.baseband]: [unknown]
+
+[ro.board.platform]: [sc8830]
+
+[ro.board_ram_size]: [mid]
+
+[ro.boot.bootloader]: [J105FXXS0ARD2]
+
+[ro.boot.debug_level]: [0x4f4c]
+
+[ro.boot.emmc_checksum]: [3]
+
+[ro.boot.serialno]: [42002714ee5ac300]
+
+[ro.boot_recovery]: [unknown]
+
+[ro.bootloader]: [J105FXXS0ARD2]
+
+[ro.bootmode]: [unknown]
+
+[ro.bt.bdaddr_path]: [/efs/bluetooth/bt_addr]
+
+[ro.build.PDA]: [J105FXXS0ARD2]
+
+[ro.build.aapt.config.prefer]: [hdpi]
+
+[ro.build.changelist]: [9723235]
+
+[ro.build.characteristics]: [default]
+
+[ro.build.date.utc]: [1524458017]
+
+[ro.build.date]: [Mon Apr 23 13:33:37 KST 2018]
+
+[ro.build.description]: [j1miniltexx-user 5.1.1 LMY47V J105FXXS0ARD2 release-keys]
+
+[ro.build.display.id]: [LMY47V.J105FXXS0ARD2]
+
+[ro.build.fingerprint]: [samsung/j1miniltexx/j1minilte:5.1.1/LMY47V/J105FXXS0ARD2:user/release-keys]
+
+[ro.build.flavor]: [j1miniltexx-user]
+
+[ro.build.hidden_ver]: [J105FXXS0ARD2]
+
+[ro.build.host]: [SWDG9706]
+
+[ro.build.id]: [LMY47V]
+
+[ro.build.official.release]: [true]
+
+[ro.build.product]: [j1minilte]
+
+[ro.build.scafe.cream]: [white]
+
+[ro.build.scafe.shot]: [single]
+
+[ro.build.scafe.size]: [short]
+
+[ro.build.scafe]: [capuccino]
+
+[ro.build.selinux.enforce]: [1]
+
+[ro.build.selinux]: [1]
+
+[ro.build.tags]: [release-keys]
+
+[ro.build.type]: [user]
+
+[ro.build.user]: [dpi]
+
+[ro.build.version.all_codenames]: [REL]
+
+[ro.build.version.base_os]: [samsung/j1miniltexx/j1minilte:5.1.1/LMY47V/J105FXXU0APK1:user/release-keys]
+
+[ro.build.version.codename]: [REL]
+
+[ro.build.version.incremental]: [J105FXXS0ARD2]
+
+[ro.build.version.release]: [5.1.1]
+
+[ro.build.version.sdk]: [22]
+
+[ro.build.version.sdl]: [2203]
+
+[ro.build.version.security_index]: [1]
+
+[ro.build.version.security_patch]: [2018-02-01]
+
+[ro.carrier]: [unknown]
+
+[ro.chipname]: [SC9830I]
+
+[ro.com.android.dataroaming]: [false]
+
+[ro.com.android.dateformat]: [MM-dd-yyyy]
+
+[ro.com.google.clientidbase]: [android-samsung]
+
+[ro.com.google.gmsversion]: [5.1_r7]
+
+[ro.config.alarm_alert]: [Morning_Flower.ogg]
+
+[ro.config.dha_cached_max]: [6]
+
+[ro.config.dha_cached_min]: [4]
+
+[ro.config.dha_empty_max]: [30]
+
+[ro.config.dha_empty_min]: [6]
+
+[ro.config.dha_lmk_scale]: [1.0]
+
+[ro.config.ksm.support]: [true]
+
+[ro.config.low_ram]: [true]
+
+[ro.config.mdha_ssr_enable]: [true]
+
+[ro.config.media_sound]: [Media_preview_Touch_the_light.ogg]
+
+[ro.config.notification_sound]: [Skyline.ogg]
+
+[ro.config.notification_sound_2]: [S_Charming_Bell.ogg]
+
+[ro.config.pre_max_kill_enable]: [true]
+
+[ro.config.ringtone]: [Over_the_Horizon.ogg]
+
+[ro.config.ringtone_2]: [Basic_Bell.ogg]
+
+[ro.config.zram.support]: [true]
+
+[ro.cp_debug_level]: [unknown]
+
+[ro.crypto.fuse_sdcard]: [true]
+
+[ro.crypto.state]: [unencrypted]
+
+[ro.csc.country_code]: [INDONESIA]
+
+[ro.csc.countryiso_code]: [ID]
+
+[ro.csc.sales_code]: [XID]
+
+[ro.dalvik.vm.native.bridge]: [0]
+
+[ro.debug_level]: [0x4f4c]
+
+[ro.debuggable]: [0]
+
+[ro.digital.fm.support]: [1]
+
+[ro.emmc_checksum]: [3]
+
+[ro.error.receiver.default]: [com.samsung.receiver.error]
+
+[ro.factorytest]: [0]
+
+[ro.frp.pst]: [/dev/block/persistent]
+
+[ro.hardware]: [sc8830]
+
+[ro.hmac_mismatch]: [unknown]
+
+[ro.im.param.offset]: [unknown]
+
+[ro.kernel.qemu]: [0]
+
+[ro.mct.compressiontype]: [ETC1]
+
+[ro.me.param.offset]: [unknown]
+
+[ro.modem.external.enable]: [0]
+
+[ro.modem.l.assert]: [/dev/spipe_lte2]
+
+[ro.modem.l.count]: [2]
+
+[ro.modem.l.dev]: [/proc/cptl/]
+
+[ro.modem.l.diag]: [/dev/sdiag_lte]
+
+[ro.modem.l.eth]: [rmnet]
+
+[ro.modem.l.fixnv_size]: [0x90000]
+
+[ro.modem.l.id]: [0]
+
+[ro.modem.l.log]: [/dev/slog_lte]
+
+[ro.modem.l.loop]: [/dev/spipe_lte0]
+
+[ro.modem.l.nv]: [/dev/spipe_lte1]
+
+[ro.modem.l.runnv_size]: [0xB4000]
+
+[ro.modem.l.snd]: [1]
+
+[ro.modem.l.tty]: [/dev/stty_lte]
+
+[ro.modem.l.vbc]: [/dev/spipe_lte6]
+
+[ro.modem.lf.assert]: [/dev/spipe_lte2]
+
+[ro.modem.lf.dev]: [/proc/cptl/]
+
+[ro.modem.lf.diag]: [/dev/sdiag_lte]
+
+[ro.modem.lf.eth]: [rmnet]
+
+[ro.modem.lf.fixnv_size]: [0x40000]
+
+[ro.modem.lf.id]: [0]
+
+[ro.modem.lf.log]: [/dev/slog_lte]
+
+[ro.modem.lf.loop]: [/dev/spipe_lte0]
+
+[ro.modem.lf.nv]: [/dev/spipe_lte1]
+
+[ro.modem.lf.runnv_size]: [0x60000]
+
+[ro.modem.lf.snd]: [1]
+
+[ro.modem.lf.tty]: [/dev/stty_lte]
+
+[ro.modem.lf.vbc]: [/dev/spipe_lte6]
+
+[ro.modem.t.assert]: [/dev/spipe_gge2]
+
+[ro.modem.t.dev]: [/proc/cpgge/]
+
+[ro.modem.t.diag]: [/dev/slog_gge]
+
+[ro.modem.t.eth]: [rmnet]
+
+[ro.modem.t.fixnv_size]: [0x20000]
+
+[ro.modem.t.id]: [0]
+
+[ro.modem.t.log]: [/dev/slog_gge]
+
+[ro.modem.t.loop]: [/dev/spipe_gge0]
+
+[ro.modem.t.nv]: [/dev/spipe_gge1]
+
+[ro.modem.t.runnv_size]: [0x40000]
+
+[ro.modem.t.snd]: [1]
+
+[ro.modem.t.tty]: [/dev/stty_gge0]
+
+[ro.modem.t.vbc]: [/dev/spipe_gge6]
+
+[ro.modem.tl.assert]: [/dev/spipe_lte2]
+
+[ro.modem.tl.dev]: [/proc/cptl/]
+
+[ro.modem.tl.diag]: [/dev/sdiag_lte]
+
+[ro.modem.tl.eth]: [rmnet]
+
+[ro.modem.tl.fixnv_size]: [0x40000]
+
+[ro.modem.tl.id]: [0]
+
+[ro.modem.tl.log]: [/dev/slog_lte]
+
+[ro.modem.tl.loop]: [/dev/spipe_lte0]
+
+[ro.modem.tl.nv]: [/dev/spipe_lte1]
+
+[ro.modem.tl.runnv_size]: [0x60000]
+
+[ro.modem.tl.snd]: [1]
+
+[ro.modem.tl.tty]: [/dev/stty_lte]
+
+[ro.modem.tl.vbc]: [/dev/spipe_lte6]
+
+[ro.modem.wcn.assert]: [/dev/spipe_wcn2]
+
+[ro.modem.wcn.count]: [1]
+
+[ro.modem.wcn.dev]: [/dev/cpwcn]
+
+[ro.modem.wcn.diag]: [/dev/slog_wcn]
+
+[ro.modem.wcn.enable]: [1]
+
+[ro.modem.wcn.id]: [1]
+
+[ro.modem.wcn.tty]: [/dev/stty_wcn]
+
+[ro.msms.phone_count]: [2]
+
+[ro.multisim.simslotcount]: [2]
+
+[ro.opengles.version]: [131072]
+
+[ro.pr.param.offset]: [unknown]
+
+[ro.product.board]: [SC9830I]
+
+[ro.product.brand]: [samsung]
+
+[ro.product.cpu.abi2]: [armeabi]
+
+[ro.product.cpu.abi]: [armeabi-v7a]
+
+[ro.product.cpu.abilist32]: [armeabi-v7a,armeabi]
+
+[ro.product.cpu.abilist64]: []
+
+[ro.product.cpu.abilist]: [armeabi-v7a,armeabi]
+
+[ro.product.device]: [j1minilte]
+
+[ro.product.hardware]: [SS_SHARKLS]
+
+[ro.product.locale.language]: [en]
+
+[ro.product.locale.region]: [GB]
+
+[ro.product.manufacturer]: [samsung]
+
+[ro.product.model]: [SM-J105F]
+
+[ro.product.modem.mode]: [GSM,EDGE,TD-SCDMA,WCDMA,TD-LTE,FDD-LTE]
+
+[ro.product.name]: [j1miniltexx]
+
+[ro.product.partitionpath]: [/dev/block/platform/sdio_emmc/by-name/]
+
+[ro.product_ship]: [true]
+
+[ro.revision]: [3]
+
+[ro.ril.ecclist]: [112,911,#911,*911]
+
+[ro.ril.gprsclass]: [10]
+
+[ro.ril.hsxpa]: [1]
+
+[ro.rtn_config]: [unknown]
+
+[ro.runtime.firstboot]: [1786381503749]
+
+[ro.sec.fle.encryption]: [true]
+
+[ro.secure]: [1]
+
+[ro.security.vpnpp.release]: [5.3]
+
+[ro.security.vpnpp.ver]: [1.4]
+
+[ro.serialno]: [42002714ee5ac300]
+
+[ro.setupwizard.mode]: [OPTIONAL]
+
+[ro.sf.lcd_density]: [240]
+
+[ro.sku.param.offset]: [unknown]
+
+[ro.sn.param.offset]: [unknown]
+
+[ro.storage.flash_type]: [2]
+
+[ro.telephony.default_network]: [9]
+
+[ro.warranty_bit]: [unknown]
+
+[ro.wifi.channels]: []
+
+[ro.zygote]: [zygote32]
+
+[sec.fle.encryption.status]: [Dec NewFile IncludeMedia]
+
+[security.ASKS.policy_version]: [161011]
+
+[selinux.policy_version]: [SEPF_SM-J105F_5.1.1_0070]
+
+[selinux.reload_policy]: [1]
+
+[selinux.sec.restorecon]: [1]
+
+[service.bootanim.exit]: [0]
+
+[service.camera.running]: [0]
+
+[service.media.powersnd]: [1]
+
+[storage.mmc.size]: [7818182656]
+
+[sys.boot_completed]: [1]
+
+[sys.cameramode.blackbox]: [0]
+
+[sys.cameramode.vtcall]: [0]
+
+[sys.dockstate]: [0]
+
+[sys.enterprise.billing.version]: [1.2.0]
+
+[sys.internal.emulated]: [1]
+
+[sys.isdumpstaterunning]: [0]
+
+[sys.lmk.adj]: [0,1,3,9,11,15]
+
+[sys.lmk.minfree]: [3072,4096,4608,6656,8704,10752]
+
+[sys.onemodem.start.enable]: [1]
+
+[sys.settings_global_version]: [3]
+
+[sys.settings_secure_version]: [4]
+
+[sys.settings_system_version]: [41]
+
+[sys.siop.level]: [0]
+
+[sys.ssrm.mdnie]: [-1]
+
+[sys.symlink.umts_router]: [/dev/pts/1  /dev/umts_router]
+
+[sys.sysctl.compact_memory]: [0]
+
+[sys.sysctl.extra_free_kbytes]: [4500]
+
+[sys.sysctl.tcp_adv_win_scale]: [2]
+
+[sys.sysctl.tcp_def_init_rwnd]: [60]
+
+[sys.tempsd.enable]: [0]
+
+[sys.usb.config]: [mtp,adb]
+
+[sys.usb.gser.count]: [8]
+
+[sys.usb.state]: [mtp,adb]
+
+[system.camera.CC.disable]: [0]
+
+[telephony.lteOnCdmaDevice]: [0]
+
+[use_brcm_fm_chip]: [true]
+
+[vold.pfe]: [deactivated]
+
+[vold.post_fs_data_done]: [1]
+
+[vzw.os.rooted]: [false]
+
+[wifi.interface]: [wlan0]
+
+[wlan.driver.status]: [ok]
+
+[wlan.p2p.no_go_iface]: [1]
+
+[zram.disksize]: [400]
+

@@ -1,0 +1,10 @@
+autotst.ko
+
+mali.ko
+
+mmc_test.ko
+
+pskey_bt.txt
+
+sprdwl.ko
+

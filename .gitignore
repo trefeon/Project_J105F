@@ -2,6 +2,9 @@
 # See docs/research/J105F-CustomOS-Research.md for the inventory + origins
 reference/
 
+# Downloaded tool binaries (Google platform-tools = adb/fastboot)
+tools/platform-tools/
+
 # Common junk
 out/
 build/

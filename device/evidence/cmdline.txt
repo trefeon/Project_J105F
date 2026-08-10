@@ -1,0 +1,2 @@
+/system/bin/sh: cat: /proc/cmdline: Permission denied
+
