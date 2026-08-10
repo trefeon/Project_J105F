@@ -1,0 +1,10 @@
+# Third-party reference material (cloned repos, ~6.4 GB, re-clonable upstream)
+# See docs/research/J105F-CustomOS-Research.md for the inventory + origins
+reference/
+
+# Common junk
+out/
+build/
+*.log
+.DS_Store
+Thumbs.db
