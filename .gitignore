@@ -5,6 +5,15 @@ reference/
 # Downloaded tool binaries (Google platform-tools = adb/fastboot)
 tools/platform-tools/
 
+# Raw device partition images — PRIVATE (EFS contains device identifiers,
+# modem is proprietary firmware). Kept local + on the phone's microSD only.
+device/evidence/stock-backup/*.img
+device/evidence/stock-backup/*.zImage
+device/evidence/stock-backup/*.cpio.gz
+
+# Separate repo workspace (custom TWRP tree lives in its own GitHub repo)
+twrp/
+
 # Common junk
 out/
 build/
