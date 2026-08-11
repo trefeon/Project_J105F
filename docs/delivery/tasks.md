@@ -23,41 +23,41 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 
 ### Task 0.1: Normalize the nested TWRP repository layout
 
-- [ ] Confirm the intended repository root contains only project metadata and `device/`, `kernel/` source paths.
-- [ ] Restore all required device files at `device/samsung/j1minilte/` without losing executable bits, symlinks, binary DTB data, or license files.
-- [ ] Confirm `kernel/samsung/j1minilte/Makefile` and `j1minilte_defconfig` exist.
-- [ ] Remove stale root-level duplicates only after checking that no build references them.
-- [ ] Stage the entire transition in one coherent commit; remove any stale `.git/index.lock` only after confirming no Git process is active.
+- [x] Confirm the intended repository root contains only project metadata and `device/`, `kernel/` source paths.
+- [x] Restore all required device files at `device/samsung/j1minilte/` without losing executable bits, symlinks, binary DTB data, or license files.
+- [x] Confirm `kernel/samsung/j1minilte/Makefile` and `j1minilte_defconfig` exist.
+- [x] Remove stale root-level duplicates only after checking that no build references them.
+- [x] Stage the entire transition in one coherent commit; remove any stale `.git/index.lock` only after confirming no Git process is active.
 
-**Verification:** `git status --short`; `git ls-files device/samsung/j1minilte kernel/samsung/j1minilte`; verify the DTB checksum and file mode; inspect `git diff --cached --stat`.
+**Verification (done):** all 15 relocated device files blob-identical to originals (git blob-hash compare); kernel tree 45,061 files incl. Makefile + `j1minilte_defconfig`; `prebuilt/dtb` binary intact; commit `4908f45a`; working tree clean. Windows caveat: `.../nouveau/core/subdev/i2c/aux.c` is an NTFS reserved name — committed blob equals clean-filter (CRLF→LF) output; index entry flagged skip-worktree locally (CI/Linux clones unaffected).
 
 ### Task 0.2: Prove the custom-source contract
 
-- [ ] Make CI check out this repository and copy only committed local device/kernel paths into the AOSP checkout.
-- [ ] Add a pre-build assertion that the expected local files exist and that no external device-tree/kernel clone step is present.
-- [ ] Document the permitted external inputs: upstream TWRP base manifest and compiler only.
+- [x] Make CI check out this repository and copy only committed local device/kernel paths into the AOSP checkout.
+- [x] Add a pre-build assertion that the expected local files exist and that no external device-tree/kernel clone step is present.
+- [x] Document the permitted external inputs: upstream TWRP base manifest and compiler only.
 
-**Acceptance:** deleting network access after the base manifest/toolchain stage still leaves the device tree and kernel available from the checked-out repository.
+**Acceptance (done):** the workflow's copy step reads `$GITHUB_WORKSPACE/device/samsung/j1minilte` and `kernel/samsung/j1minilte` from the checked-out repo; the only network fetches are the manifest sync and the arm-eabi-4.8 prebuilt. No device-tree/kernel clone steps remain. (Delete-network-after-sync equivalence holds because copies happen from the checkout, not the network.)
 
 ## Phase 1 — TWRP CI diagnosis and reproducible build
 
 ### Task 1.1: Capture the real failure
 
-- [ ] Retrieve the complete logs for the latest failed workflow run.
-- [ ] Classify the first failure as checkout/layout, dependency, Java/Python, manifest sync, compiler, kernel, recovery build, packaging, or artifact upload.
-- [ ] Record the exact command, error, and runner environment in a build report.
+- [x] Retrieve the complete logs for the latest failed workflow run.
+- [x] Classify the first failure as checkout/layout, dependency, Java/Python, manifest sync, compiler, kernel, recovery build, packaging, or artifact upload.
+- [x] Record the exact command, error, and runner environment in a build report.
 
-**Verification:** `gh run view <run-id> --log-failed` (or equivalent saved CI log); identify the earliest actionable error, not a downstream cascade.
+**Verification (done):** `gh run view <run-id> --log-failed` for all three historical runs + first relocated run. Report: `docs/build-reports/ci-investigation.md`. Classifications: action-resolution (31421309135), swap `Text file busy` (31421517523), missing `mkdir` before device-tree copy (31421781959), missing Python 2 (31465251155). All fixed from observed errors; no guessed changes.
 
 ### Task 1.2: Make the build environment explicit
 
-- [ ] Pin the manifest revision or record the resolved revision after sync.
-- [ ] Use a supported JDK and explicitly install every required legacy host dependency.
-- [ ] Add Python compatibility only if the failure proves it is required; avoid speculative packages.
-- [ ] Make swap creation disk-aware and fail clearly when there is insufficient free disk.
-- [ ] Cache only safe, reproducible dependencies; never cache output that can hide a failed source install.
+- [ ] Pin the manifest revision or record the resolved revision after sync. *(do after first clean build)*
+- [x] Use a supported JDK and explicitly install every required legacy host dependency.
+- [x] Add Python compatibility only if the failure proves it is required; avoid speculative packages. *(python2 added after run 31465251155 proved it)*
+- [x] Make swap creation disk-aware and fail clearly when there is insufficient free disk.
+- [ ] Cache only safe, reproducible dependencies; never cache output that can hide a failed source install. *(no caching configured yet — acceptable; re-evaluate after clean build)*
 
-**Acceptance:** the workflow reaches the local device-tree validation step on a clean runner.
+**Acceptance:** the workflow reaches the local device-tree validation step on a clean runner. *(met — run 31465251155 passed checkout/copy/toolchain and reached Build TWRP)*
 
 ### Task 1.3: Validate kernel integration before full recovery build
 
