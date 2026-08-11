@@ -210,7 +210,11 @@ Cheap, safe, unblocks everything. No device writes.
   Select-String -Path twrp\device\samsung\j1minilte\BoardConfig.mk -Pattern "PARTITION_SIZE"
   git -C twrp log --oneline -1
   ```
-- [ ] Done — **NOT DONE.** `BoardConfig.mk` still declares 20971520; the final recovery.img (11.34 MiB) fits both limits, but the CI gate must be tightened to 16777216 before release (R1). Pending A3 PIT confirmation.
+- [x] Done — 2026-08-11. `BoardConfig.mk` now 16777216 for BOOT+RECOVERY with an evidence comment (live `/proc/partitions` p20/p21 = 16,384 KiB; ROADMAP C4). Commit `0f7f3586` (twrp repo).
+
+#### A4b — (kernel repo) boot partition size
+- **Do (2026-08-11):** kernel `kernel.yml` size gate tightened from 20971520 to 16777216 (fail closed ≥ limit).
+- [x] Done — 2026-08-11. Commit `f31f090a` (kernel repo); both green runs re-verified: recovery.img 11,890,688 B and boot.img 6,850,560 B both < 16,777,216.
 
 ---
 
@@ -284,7 +288,7 @@ Implements PRD FR-2, FR-3. This is what makes the image safe to hand to a human.
 - **Accept:** An oversized image can never be published. This directly closes R1.
 - **Verify:** Read the step log — it must print the real byte count and the 16,777,216 limit. Confirm the
   comparison is `>=`, not `>`.
-- [ ] Done — **NOT DONE.** CI still enforces 20971520 (20 MiB); real partition is 16,777,216 B (C4/R1). Tighten gate in `twrp.yml` + `kernel.yml` to 16777216 (with `>=` comparison) before release.
+- [x] Done — 2026-08-11. Both CI gates now fail closed at ≥ 16,777,216 B: twrp.yml (`0f7f3586`, `-ge 16777216`) and kernel.yml (`f31f090a`, `assert size < 16777216`). Green runs 31524994619 (recovery.img 11,890,688 B) and 31524994372 (boot.img 6,850,560 B). Comparison is `>=` per the roadmap rule. R1 closed.
 
 #### C2 — Checksums and build metadata
 - **Depends on:** C1
