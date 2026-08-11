@@ -51,6 +51,11 @@ Status: COMPLETE (2026-08-11). All three historical failures classified; fixes l
 - **Image inspection (tools/parse_bootimg.py, SPRD support added):** ANDROID! header, page 2048, ARM zImage 5,146,640 B, gzip ramdisk 6,408,655 B, dt.img = SPRD table with 5 DTBs (SP8835EB board) — **all 5 byte-identical to the DTBs extracted from the user's stock boot image** (device/evidence/stock-backup/dtb/). Hardware evidence matches the artifact.
 - **Follow-up:** workflow 33819a71 adds fail-closed 20 MiB size check + SHA256SUMS + BUILD_INFO.txt + pinned manifest snapshot.
 
+### Run 31474055688 (branded final) — SUCCESS ✅
+- **Result:** final branded build green (headSha 2d63e410). Artifacts: recovery.img (11,890,688 B, SHA-256 `aa34d1d0…`), recovery.tar (`98e2690f…`), SHA256SUMS, BUILD_INFO.txt (source_commit 2d63e410), manifest-pinned.xml. Local hashes match CI SHA256SUMS.
+- **Branding verified** inside the decompressed ramdisk: `0_j105f-custom` (TW_DEVICE_VERSION) and `Samsung Galaxy J1 Mini (custom TWRP)` (PRODUCT_MODEL).
+- Phase 1 (Checkpoint 1) COMPLETE; Phase 2 device test is the next gate (user + hardware required).
+
 ## Runner environment (ubuntu-22.04, from run logs)
 - JDK: Zulu 8 (0.502-7) via actions/setup-java
 - Repo tool: `~/.bin/repo` (git-repo-downloads)
