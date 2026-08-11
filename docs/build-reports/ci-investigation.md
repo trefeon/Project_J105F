@@ -34,6 +34,12 @@ Status: COMPLETE (2026-08-11). All three historical failures classified; fixes l
 - **Classification:** build environment (no packaged python2 for ubuntu-22.04 exists in 2026)
 - **Fix:** build Python 2.7.18 from source (python.org tarball, `--prefix=/usr/local/python2.7`, symlink `python`/`python2`) — commit 20468788. zlib/bz2 modules build from the AOSP dev packages already installed.
 
+### Run 31466528272 (python2 from source) — FAIL
+- **Failing step:** `Build TWRP`
+- **Root cause:** `prebuilts/clang/linux-x86/host/3.6/bin/clang: error while loading shared libraries: libncurses.so.5` — the omni-6.0 tree's bundled host clang 3.6 links against legacy ncurses5; ubuntu-22.04 default is ncurses6. (Confirmed: `libncurses5`/`libtinfo5` exist as jammy universe packages, 6.3-2ubuntu0.2.)
+- **Classification:** build environment (legacy shared library)
+- **Fix:** add `libncurses5 libtinfo5` to the AOSP host deps (commit 73dcfaeb)
+
 ## Runner environment (ubuntu-22.04, from run logs)
 - JDK: Zulu 8 (0.502-7) via actions/setup-java
 - Repo tool: `~/.bin/repo` (git-repo-downloads)
@@ -44,5 +50,5 @@ Status: COMPLETE (2026-08-11). All three historical failures classified; fixes l
 `gh run view <run-id> --log-failed` — earliest actionable error captured for each run; no guessed fixes (each change was made only after observing the specific error).
 
 ## Next
-- Await run triggered by 20468788 (python2.7 source build); iterate on any further observed failures.
+- Await run triggered by 73dcfaeb (libncurses5); iterate on any further observed failures.
 - After first clean build: pin manifest revision, add size-check + checksums + metadata (FR-3), then device test.
