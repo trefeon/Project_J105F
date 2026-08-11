@@ -40,6 +40,12 @@ Status: COMPLETE (2026-08-11). All three historical failures classified; fixes l
 - **Classification:** build environment (legacy shared library)
 - **Fix:** add `libncurses5 libtinfo5` to the AOSP host deps (commit 73dcfaeb)
 
+### Run 31466973967 (libncurses5) — FAIL
+- **Failing step:** `Build TWRP` → kernel `headers_install`
+- **Root cause:** `Makefile.headersinst:55: *** Missing UAPI file include/uapi/linux/netfilter/xt_CONNMARK.h. Stop.` — the upstream kernel tree contains case-variant filename pairs (`xt_CONNMARK.h`/`xt_connmark.h` …); a case-insensitive Windows checkout keeps only one disk file per pair, so 12 exact-case paths were absent from the committed tree.
+- **Classification:** source tree (case-collision loss)
+- **Fix:** restored all 12 exact-case entries (8 netfilter uapi headers + 4 netfilter module sources) from upstream blobs (commit dfccd4fb). Full-tree verification: all 45,073 upstream paths present exact-case; remaining blob diffs vs upstream are EOL-only (upstream committed CRLF, repo stores LF).
+
 ## Runner environment (ubuntu-22.04, from run logs)
 - JDK: Zulu 8 (0.502-7) via actions/setup-java
 - Repo tool: `~/.bin/repo` (git-repo-downloads)
@@ -50,5 +56,5 @@ Status: COMPLETE (2026-08-11). All three historical failures classified; fixes l
 `gh run view <run-id> --log-failed` — earliest actionable error captured for each run; no guessed fixes (each change was made only after observing the specific error).
 
 ## Next
-- Await run triggered by 73dcfaeb (libncurses5); iterate on any further observed failures.
+- Await run triggered by dfccd4fb (case-variant headers); iterate on any further observed failures.
 - After first clean build: pin manifest revision, add size-check + checksums + metadata (FR-3), then device test.
