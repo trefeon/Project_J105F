@@ -46,7 +46,7 @@ A clean GitHub Actions runner MUST be able to resolve the pinned/recorded build 
 
 ### FR-3 Artifact safety
 
-CI MUST reject a recovery image larger than the target 20 MiB recovery partition and MUST publish SHA-256 checksums and build metadata.
+CI MUST reject a recovery image larger than the target recovery partition (16 MiB / 16,777,216 B per /proc/partitions p20/p21 - ROADMAP C4; BoardConfig's 20 MiB claim overstates) and MUST publish SHA-256 checksums and build metadata.
 
 ### FR-4 Recovery behavior
 

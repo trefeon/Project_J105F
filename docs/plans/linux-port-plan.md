@@ -1,5 +1,7 @@
 # Linux Port Plan — SM-J105F (samsung-j1minilte) — postmarketOS (Alpine Linux)
 
+> Superseded as an execution plan by `docs/delivery/ROADMAP.md`. Retained for reference detail only.
+
 **Goal:** Boot a real Linux distribution (postmarketOS / Alpine Linux) on the Samsung Galaxy J1 Mini SM-J105F, by **porting the archived pmOS `samsung-j1mini3g` port** (same SC8830 SoC, sibling model) and then **remaking it** into our own fork.
 
 **Strategy:** Fastest path to a booting baseline = replicate the archived port exactly (proven combo), then iterate device-specific bits (j1minilte), then fork/rebrand/optimize ("remake").
@@ -11,7 +13,7 @@
 | Item | Fact | Source |
 |---|---|---|
 | Board name | `Spreadtrum_SP8835EB_board` (SC8830 EVB) — 6 DTBs in boot image | `reference/dumps/samsung_j1minilte_dump/bootimg/` |
-| Partitions | `KERNEL`→/boot, `SYSTEM`, `userdata`, `CACHE`, `efs`, `HIDDEN`→/preload, `prodnv`, `RECOVERY` — base `/dev/block/platform/sdio_emmc/by-name/`; boot+recovery = **20 MB** (20971520 B), pagesize 2048, kernel cmdline `console=ttyS1,115200n8` | `reference/device_trees/twrp_device_samsung_j1minilte_notnoel/` (BoardConfig.mk, twrp.fstab) |
+| Partitions | `KERNEL`→/boot, `SYSTEM`, `userdata`, `CACHE`, `efs`, `HIDDEN`→/preload, `prodnv`, `RECOVERY` — base `/dev/block/platform/sdio_emmc/by-name/`; boot+recovery = **16 MiB** (16,777,216 B per /proc/partitions p20/p21 = 16,384 KiB; BoardConfig's 20971520 overstates - ROADMAP C4), pagesize 2048, kernel cmdline `console=ttyS1,115200n8` | `reference/device_trees/twrp_device_samsung_j1minilte_notnoel/` (BoardConfig.mk, twrp.fstab) |
 | Kernel candidates | ① `android_kernel_samsung_j1mini3g` @ `6a377f7` (IKGapirov — source of the pmOS recipe, 3.10.106) ② cm-14.1 sharkls 3.10.100 w/ built-in `j1minilte_defconfig` ③ stock J105F 3.10.x (MayuriLabs) w/ `j1minilte_defconfig` | `reference/docs/pmaports/device/archived/linux-samsung-j1mini3g/APKBUILD`, local kernels |
 | WiFi | `drivers/net/wireless/sprdwl` + `sc2331` present in cm-14.1 kernel | `reference/kernels/kernel_samsung_sharkls_gj105f/drivers/net/wireless/` |
 | GPU | Mali-400 `r4p0` kernel driver present (Android-lib userspace HAL → **no accel in Linux; fbdev only**) | kernel `drivers/gpu/mali400/` |
@@ -51,7 +53,7 @@
 |---|---|---|---|
 | 2.1 | `pmbootstrap install` (minimal: base + openssh + evtest, **no UI**) → rootfs to SYSTEM partition (heimdall flash SYSTEM, TWRP fallback) | If SYSTEM too small per PIT (0.4) → **Switch decision D2 to `--sdcard` install** (microSD rootfs; SD ≥16 GB) | boots to Alpine login on fbcon |
 | 2.2 | Validate inputs: touch via `evtest /dev/input/event2`; display refresh check (msm-fb-refresher already in depends) | deviceinfo touch path already set | events + no garbled fb |
-| 2.3 | Storage: mount userdata (internal) or SD as `/home`/media; swap/zram.conf decision (768 MB RAM → **zram strongly recommended**) | pmOS has zram-init | `free -m` shows zram |
+| 2.3 | Storage: mount userdata (internal) or SD as `/home`/media; swap/zram.conf decision (~1 GB RAM → **zram strongly recommended**) | pmOS has zram-init | `free -m` shows zram |
 | 2.4 | Network bring-up (pick best first that works): ① **WiFi** — enable `sprdwl`/`sc2331` in config → module + firmware from stock `/system/vendor` (extract from dump) → `/lib/firmware` ② **USB RNDIS** — enable Android RNDIS gadget in kernel config ③ USB tether from second phone | firmware blobs: search dump `system/vendor` for wcn/sc2331 files | `ip a` shows wlan0/usb0; `ssh` from PC |
 
 **Gate 2:** root shell over ssh (wifi or usb) + touch + storage. This is the "developable" state — everything after is done remotely.
@@ -60,7 +62,7 @@
 | # | Task | Details | Verify |
 |---|---|---|---|
 | 3.1 | Xorg with `xf86-video-fbdev` (fbdev, no KMS on 3.10) + `xf86-input-evdev`; `msm-fb-refresher` keeps fb updated | sprd fb quirks already patched (colors/buffering) | `startx` → X root window on display |
-| 3.2 | Lightweight DE first pass: **XFCE4 minimal** (xorg-xfce4 default pmOS package set) — measure RAM; fallback sxmo/awesome if >500 MB idle | 768 MB total — keep DE choices open (decision D3) | desktop + mouse-touch works; `free -m` < 500 MB used idle |
+| 3.2 | Lightweight DE first pass: **XFCE4 minimal** (xorg-xfce4 default pmOS package set) — measure RAM; fallback sxmo/awesome if >500 MB idle | ~1 GB total — keep DE choices open (decision D3) | desktop + mouse-touch works; `free -m` < 500 MB used idle |
 | 3.3 | WiFi GUI (networkmanager) + power basics: battery via sysfs (pmOS has battery monitoring), volume keys, disable suspend (risky on sprd 3.10) | keep scope tight | wifi connect from GUI |
 
 **Gate 3:** full desktop: display + touch + wifi + ssh, stable across reboots.
@@ -91,7 +93,7 @@
 - ❌ Modem/calls/SMS — no RIL in pmOS for sprd; phone is a pocket Linux computer, not a phone
 - ❌ Audio initially (Android HAL audio pipeline; possible later via ALSA if codec exposed — low priority)
 - ⚠️ WiFi = highest-risk hardware (sprdwl + firmware blobs) — USB RNDIS/tether is the guaranteed fallback
-- ⚠️ 768 MB RAM — zram + minimal DE mandatory
+- ⚠️ ~1 GB RAM — zram + minimal DE mandatory
 - ⚠️ Archived port = unmaintained upstream; expect apk/pmbootstrap API drift — pin `pmbootstrap` version for first boot, upgrade later
 
 ## 4. Reference material (all local, in `reference/`)
@@ -116,4 +118,4 @@ Executable detail now lives in `docs/plans/linux-kernel-foundation-plan.md` (tas
 - **D5 revised — build host:** WSL2 is NOT installed on the Windows host. Kernel build moves CI-first (GitHub Actions ubuntu-22.04, same pattern as the proven TWRP CI); WSL2 install is deferred to the pmbootstrap/rootfs phase where it is actually required.
 - **Kernel-base strategy revised (D1 context):** the vendor `j1minilte` kernel tree (already committed at `twrp/kernel/samsung/j1minilte`, built in TWRP CI with `j1minilte_defconfig`) produced a recovery image whose 5 DTBs are byte-identical to the device's stock SP8835EB DTBs. First Linux boot milestone therefore uses **this proven kernel** (change-one-thing-at-a-time: only the initramfs differs from recovery) instead of the archived IKGapirov recipe; the archived recipe becomes the follow-up pmOS-integration milestone after Gate D evidence exists.
 - **K2 (new):** milestone-1 initramfs = minimal busybox debug init; `postmarketos-mkinitfs` at rootfs phase.
-- Device/partition facts (D2) unchanged and confirmed live: SYSTEM 2148 MB, userdata 4935 MB, cache 197 MB, boot+recovery 20 MiB.
+- Device/partition facts (D2) unchanged and confirmed live: SYSTEM 2148 MB, userdata 4935 MB, cache 197 MB, boot+recovery 16 MiB (ROADMAP C4).

@@ -1,12 +1,14 @@
 # Project J105F Delivery Plan
 
+> Superseded as an execution plan by `docs/delivery/ROADMAP.md`. Retained for reference detail only.
+
 ## Goal
 
 Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS port for the Samsung SM-J105F. The recovery must build from source committed in this repository; no workflow may clone the device tree or kernel from an external project as its implementation source.
 
 ## Current baseline and blockers
 
-- Hardware evidence identifies the tested unit as `j1miniltexx`, `sc8830`, single-SIM, 1 GB RAM, firmware `J105FXXS0ARD2`.
+- Hardware evidence identifies the tested unit as `j1miniltexx`, `sc8830`, **dual-SIM (DSDS)**, ~1 GB RAM (941,892 kB), firmware `J105FXXS0ARD2`.
 - The TWRP source was copied into `twrp/device/samsung/j1minilte` and `twrp/kernel/samsung/j1minilte`.
 - The nested TWRP repository currently has a broken working-tree transition: source files were deleted from the repository root while replacement copies are untracked under `device/` and `kernel/`. This must be resolved before treating the source layout as committed.
 - GitHub Actions has had repeated failures. The exact failing step must be obtained from the run log before making another speculative workflow change.
@@ -71,12 +73,12 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 ### Task 1.4: Build and package recovery
 
 - [x] Run `lunch omni_j1minilte-eng` and `make recoveryimage`. *(CI, run 31469647748 — SUCCESS)*
-- [x] Confirm output device/product names and recovery partition size. *(out/target/product/j1minilte/recovery.img; 20 MiB / 20971520)*
+- [x] Confirm output device/product names and recovery partition size. *(out/target/product/j1minilte/recovery.img; 11.34 MiB — fits the real 16 MiB partition per `/proc/partitions`; BoardConfig's 20971520 claim corrected by ROADMAP C4)*
 - [x] Inspect the resulting image format, boot header, kernel, ramdisk, DTB, and size. *(ANDROID! header, page 2048, ARM zImage 5.1 MB, gzip ramdisk 6.4 MB, SPRD dt.img with 5 DTBs — all byte-identical to device stock DTBs, SP8835EB board; 11.34 MiB total)*
 - [x] Produce `recovery.img` and an Odin-compatible `recovery.tar` as separate artifacts.
 - [ ] Include SHA-256 checksums and a build metadata file containing source commit, manifest revision, toolchain, and date. *(workflow added — pending green run 33819a71)*
 
-**Acceptance:** clean CI produces artifacts reproducibly and fails closed if the image exceeds the 20 MiB recovery partition. *(size-check step added; pending validation on next run)*
+**Acceptance:** clean CI produces artifacts reproducibly and fails closed if the image exceeds the recovery partition. *(size-check step added; gate value 20971520 — to be tightened to the real 16,777,216 B per ROADMAP C4/A4/C1)*
 
 ### Checkpoint 1
 
@@ -84,7 +86,7 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 - [x] CI failure has a root cause, not a guessed fix.
 - [x] A clean runner builds and packages a size-checked recovery image.
 
-**Evidence:** commits 4908f45a (relocation) / dfccd4fb (case-variant headers) / 33819a71 (FR-3 hardening); green run 31472573689; artifact inspected — 5 DTBs byte-identical to stock device DTBs (SP8835EB); 11.34 MiB ≤ 20 MiB; SHA256SUMS + BUILD_INFO.txt + manifest-pinned.xml published.
+**Evidence:** commits 4908f45a (relocation) / dfccd4fb (case-variant headers) / 33819a71 (FR-3 hardening); green run 31472573689; artifact inspected — 5 DTBs byte-identical to stock device DTBs (SP8835EB); 11.34 MiB fits the real 16 MiB partition (ROADMAP C4); SHA256SUMS + BUILD_INFO.txt + manifest-pinned.xml published.
 
 ## Phase 2 — Custom recovery quality
 
@@ -137,7 +139,7 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 
 - [x] Derive the DTB from verified stock/recovery evidence and compare nodes against the kernel drivers. *(CI fail-closed gate: dt.img DTBs byte-identical vs tests/stock-dtb = device stock dtbs; kernel-dtc dtbs compared diagnostically — 0/5 identical, expected dtc-version diff, non-gating)*
 - [x] Define boot arguments for console, framebuffer, storage, initramfs, and root filesystem. *(base 0x0 / kernel 0x8000 / ramdisk 0x1000000 / second 0xf00000 / tags 0x100 / pgsz 2048; cmdline console=ttyS1,115200n8; busybox debug initramfs)*
-- [x] Validate kernel image size and boot header offsets against the Samsung boot layout. *(CI fail-closed verify: header fields + size 6.53 MiB ≤ 20 MiB + dt.img byte-identical — VERIFY PASS)*
+- [x] Validate kernel image size and boot header offsets against the Samsung boot layout. *(CI fail-closed verify: header fields + size 6.53 MiB fits the real 16 MiB partition + dt.img byte-identical — VERIFY PASS)*
 - [x] Produce a flashable `boot.img` (mkbootimg, SEANDROIDENFORCE appended) + evidence pack (checksums, BUILD_INFO). *(artifacts in device/evidence/build-artifacts/kernel-m31/, checksums verified)*
 - [ ] Flash via TWRP Install Image → KERNEL (**after user approval**), record 3 boot attempts + `last_kmsg` where possible, demonstrate rollback from stock boot backup. *(M3.3 — needs user + phone)*
 

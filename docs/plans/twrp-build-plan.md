@@ -1,5 +1,7 @@
 # Custom TWRP Build Plan — SM-J105F (j1minilte)
 
+> Superseded as an execution plan by `docs/delivery/ROADMAP.md`. Retained for reference detail only.
+
 **Goal:** Build OUR OWN modern TWRP for the J1 mini — replacing the buggy 2017 TWRP 3.0.3-0 (dead MTP, quirky adb, old UI). Custom-branded, built from the 2024 `NotNoelChannel` device tree, which has proven BoardConfig for this exact device (our clone is on its `twrp-5.1` branch — the working branch).
 
 **Status of research:** complete (2026-08-11). Build recipe extracted from the tree's own CI workflow.
