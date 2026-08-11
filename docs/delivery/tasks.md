@@ -119,29 +119,29 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 
 ### Task 3.1: Choose a build host
 
-- [ ] Decide build host strategy (D5). *(Finding 2026-08-11: WSL2 NOT installed; default = CI-first on GitHub Actions ubuntu-22.04 like TWRP, WSL2 deferred to rootfs phase)*
-- [ ] Use a machine with enough RAM, swap, CPU, and disk for the selected kernel/rootfs workflow. *(CI runners chosen for kernel; VPS reserved for small cross-compile only)*
-- [ ] Keep the low-memory VPS for small cross-compilation tasks only unless resource limits are increased.
-- [ ] Record host toolchain versions and reproducible setup steps. *(arm-eabi-4.8 @ android-5.1.1_r38, ubuntu-22.04 — same as TWRP CI)*
+- [x] Decide build host strategy (D5). *(CI-first on GitHub Actions ubuntu-22.04, same as TWRP; WSL2 deferred to rootfs phase — not installed today)*
+- [x] Use a machine with enough RAM, swap, CPU, and disk for the selected kernel/rootfs workflow. *(CI runners used for kernel; VPS reserved for small cross-compile only)*
+- [x] Keep the low-memory VPS for small cross-compilation tasks only unless resource limits are increased.
+- [x] Record host toolchain versions and reproducible setup steps. *(arm-eabi-4.8 @ android-5.1.1_r38, ubuntu-22.04, recorded in BUILD_INFO.txt artifact)*
 
 ### Task 3.2: Establish the kernel baseline
 
-- [ ] Fork kernel source into nested repo `os/kernel/` (FR-1; mirror `twrp/` pattern, remote `trefeon/linux-samsung-j1minilte`), reusing Phase 0.1 Windows-hardening for the 13 problem paths (12 case-variant + `aux.c`).
-- [ ] Decide kernel base (K1). *(Default: vendor `j1minilte` tree + `j1minilte_defconfig` — the exact source already proven bootable via TWRP CI with byte-identical SP8835EB DTBs; archived IKGapirov recipe @ 6a377f7 is follow-up)*
-- [ ] Freeze the selected 3.10 source revision and patch set. *(vendor tree @ 4908f45a-state for M3.1; archived 7-patch set only as needed for GCC-compat milestone)*
-- [ ] Apply only patches required for SC8830/J1 Mini bring-up, each with a commit and rationale. *(expected: none for arm-eabi-4.8 milestone; documented if any)*
-- [ ] Build the baseline defconfig and save `.config`, compiler version, and image checksum. *(CI saves .config + SHA256SUMS + BUILD_INFO.txt)*
-- [ ] Confirm whether the target needs a separately supplied DTB or appended DTB. *(confirmed: SPRD dt.img, 5 DTBs, appended after ramdisk — same as stock/TWRP images)*
+- [x] Fork kernel source into nested repo `os/kernel/` (FR-1; remote `trefeon/linux-samsung-j1minilte`, commit 90cfeaa5, 45,061 files blob-parity verified vs twrp repo, Windows-hardened).
+- [x] Decide kernel base (K1). *(vendor `j1minilte` tree + `j1minilte_linux_defconfig` — proven source; archived IKGapirov recipe deferred to M3.4)*
+- [x] Freeze the selected 3.10 source revision and patch set. *(vendor tree @ twrp 4908f45a state; no patches needed for the arm-eabi-4.8 milestone)*
+- [x] Apply only patches required for SC8830/J1 Mini bring-up, each with a commit and rationale. *(config delta only: DEVTMPFS/VT/fbcon in j1minilte_linux_defconfig — one commit with rationale)*
+- [x] Build the baseline defconfig and save `.config`, compiler version, and image checksum. *(CI saves .config + SHA256SUMS + BUILD_INFO.txt; all verified locally)*
+- [x] Confirm whether the target needs a separately supplied DTB or appended DTB. *(SPRD dt.img, 5 DTBs, appended after ramdisk — same as stock; packed from device stock dtbs, byte-identical)*
 
 ### Task 3.3: Device-tree and boot arguments
 
-- [ ] Derive the DTB from verified stock/recovery evidence and compare nodes against the kernel drivers. *(CI gate: dt.img DTBs byte-compare vs `device/evidence/stock-backup/dtb/dtb_00..04.dtb` — fail closed on mismatch)*
-- [ ] Define boot arguments for console, framebuffer, storage, initramfs, and root filesystem. *(base 0x0 / kernel 0x8000 / ramdisk 0x1000000 / second 0xf00000 / tags 0x100 / pgsz 2048; cmdline console=ttyS1,115200n8; busybox debug initramfs K2)*
-- [ ] Validate kernel image size and boot header offsets against the Samsung boot layout. *(parse_bootimg.py re-verification before any flash; ≤ 20 MiB size gate)*
-- [ ] Produce a flashable `boot.img` (mkbootimg, SEANDROIDENFORCE appended) + evidence pack (checksums, BUILD_INFO).
-- [ ] Flash via TWRP Install Image → KERNEL (**after user approval**), record 3 boot attempts + `last_kmsg` where possible, demonstrate rollback from stock boot backup.
+- [x] Derive the DTB from verified stock/recovery evidence and compare nodes against the kernel drivers. *(CI fail-closed gate: dt.img DTBs byte-identical vs tests/stock-dtb = device stock dtbs; kernel-dtc dtbs compared diagnostically — 0/5 identical, expected dtc-version diff, non-gating)*
+- [x] Define boot arguments for console, framebuffer, storage, initramfs, and root filesystem. *(base 0x0 / kernel 0x8000 / ramdisk 0x1000000 / second 0xf00000 / tags 0x100 / pgsz 2048; cmdline console=ttyS1,115200n8; busybox debug initramfs)*
+- [x] Validate kernel image size and boot header offsets against the Samsung boot layout. *(CI fail-closed verify: header fields + size 6.53 MiB ≤ 20 MiB + dt.img byte-identical — VERIFY PASS)*
+- [x] Produce a flashable `boot.img` (mkbootimg, SEANDROIDENFORCE appended) + evidence pack (checksums, BUILD_INFO). *(artifacts in device/evidence/build-artifacts/kernel-m31/, checksums verified)*
+- [ ] Flash via TWRP Install Image → KERNEL (**after user approval**), record 3 boot attempts + `last_kmsg` where possible, demonstrate rollback from stock boot backup. *(M3.3 — needs user + phone)*
 
-**Acceptance / Gate D (partial):** the device reaches a kernel-visible console or a documented first crash with a captured log; FR-6 evidence report published (`docs/build-reports/kernel-foundation-*.md`).
+**Acceptance / Gate D (partial):** the device reaches a kernel-visible console or a documented first crash with a captured log; FR-6 evidence report published (`docs/build-reports/kernel-foundation-*.md`). *(M3.1/M3.2 evidence in docs/build-reports/kernel-m31.md; Gate D pending device boot)*
 
 ## Phase 4 — Linux userspace and hardware bring-up
 
