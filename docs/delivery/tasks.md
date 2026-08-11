@@ -78,7 +78,7 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 - [x] Produce `recovery.img` and an Odin-compatible `recovery.tar` as separate artifacts.
 - [ ] Include SHA-256 checksums and a build metadata file containing source commit, manifest revision, toolchain, and date. *(workflow added — pending green run 33819a71)*
 
-**Acceptance:** clean CI produces artifacts reproducibly and fails closed if the image exceeds the recovery partition. *(size-check step added; gate value 20971520 — to be tightened to the real 16,777,216 B per ROADMAP C4/A4/C1)*
+**Acceptance:** clean CI produces artifacts reproducibly and fails closed if the image exceeds the recovery partition. *(size-check step active; gate tightened to the real 16,777,216 B per ROADMAP C4/A4/C1 — twrp repo 0f7f3586, green run 31524994619)*
 
 ### Checkpoint 1
 
