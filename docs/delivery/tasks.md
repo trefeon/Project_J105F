@@ -80,9 +80,20 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 
 ### Checkpoint 1
 
-- [ ] TWRP source layout is clean and committed.
-- [ ] CI failure has a root cause, not a guessed fix.
-- [ ] A clean runner builds and packages a size-checked recovery image.
+- [x] TWRP source layout is clean and committed.
+- [x] CI failure has a root cause, not a guessed fix.
+- [x] A clean runner builds and packages a size-checked recovery image.
+
+**Evidence:** commits 4908f45a (relocation) / dfccd4fb (case-variant headers) / 33819a71 (FR-3 hardening); green run 31472573689; artifact inspected — 5 DTBs byte-identical to stock device DTBs (SP8835EB); 11.34 MiB ≤ 20 MiB; SHA256SUMS + BUILD_INFO.txt + manifest-pinned.xml published.
+
+## Phase 2 — Custom recovery quality
+
+### Task 2.1: Identity and licensing
+
+- [x] Replace inherited branding with the project/device identity. *(commit 2d63e410)*
+- [x] Set `TW_DEVICE_VERSION` and `PRODUCT_MODEL` consistently. *(0_j105f-custom; "Samsung Galaxy J1 Mini (custom TWRP)")*
+- [x] Preserve and audit upstream license notices. *(COPYING AGPL-3.0 preserved; README credits NotNoelChannel)*
+- [ ] Add a build-info screen or file identifying the source commit. *(BUILD_INFO.txt artifact ✓; TWRP About shows TW_DEVICE_VERSION — mark done after final build)*
 
 ## Phase 2 — Custom recovery quality
 
