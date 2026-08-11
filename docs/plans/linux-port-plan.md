@@ -106,3 +106,14 @@
 1. 0.1–0.4 (downloads + TWRP backup + PIT) — needs you at the computer with the phone
 2. Me (in WSL2 if available): 1.1 recipe fork + kernel build
 3. Report back which gate blocks — iterate
+
+---
+
+## 6. Plan update 2026-08-11 (post-Phase-1 evidence)
+
+Executable detail now lives in `docs/plans/linux-kernel-foundation-plan.md` (tasks.md Phase 3). Revisions driven by new evidence:
+
+- **D5 revised — build host:** WSL2 is NOT installed on the Windows host. Kernel build moves CI-first (GitHub Actions ubuntu-22.04, same pattern as the proven TWRP CI); WSL2 install is deferred to the pmbootstrap/rootfs phase where it is actually required.
+- **Kernel-base strategy revised (D1 context):** the vendor `j1minilte` kernel tree (already committed at `twrp/kernel/samsung/j1minilte`, built in TWRP CI with `j1minilte_defconfig`) produced a recovery image whose 5 DTBs are byte-identical to the device's stock SP8835EB DTBs. First Linux boot milestone therefore uses **this proven kernel** (change-one-thing-at-a-time: only the initramfs differs from recovery) instead of the archived IKGapirov recipe; the archived recipe becomes the follow-up pmOS-integration milestone after Gate D evidence exists.
+- **K2 (new):** milestone-1 initramfs = minimal busybox debug init; `postmarketos-mkinitfs` at rootfs phase.
+- Device/partition facts (D2) unchanged and confirmed live: SYSTEM 2148 MB, userdata 4935 MB, cache 197 MB, boot+recovery 20 MiB.

@@ -115,26 +115,33 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 
 ## Phase 3 — Linux/pmOS kernel foundation
 
+**Plan:** `docs/plans/linux-kernel-foundation-plan.md` (detailed execution plan + decisions D5/K1/K2).
+
 ### Task 3.1: Choose a build host
 
-- [ ] Use a machine with enough RAM, swap, CPU, and disk for the selected kernel/rootfs workflow.
+- [ ] Decide build host strategy (D5). *(Finding 2026-08-11: WSL2 NOT installed; default = CI-first on GitHub Actions ubuntu-22.04 like TWRP, WSL2 deferred to rootfs phase)*
+- [ ] Use a machine with enough RAM, swap, CPU, and disk for the selected kernel/rootfs workflow. *(CI runners chosen for kernel; VPS reserved for small cross-compile only)*
 - [ ] Keep the low-memory VPS for small cross-compilation tasks only unless resource limits are increased.
-- [ ] Record host toolchain versions and reproducible setup steps.
+- [ ] Record host toolchain versions and reproducible setup steps. *(arm-eabi-4.8 @ android-5.1.1_r38, ubuntu-22.04 — same as TWRP CI)*
 
 ### Task 3.2: Establish the kernel baseline
 
-- [ ] Freeze the selected 3.10.106 source revision and patch set.
-- [ ] Apply only patches required for SC8830/J1 Mini bring-up, each with a commit and rationale.
-- [ ] Build the baseline defconfig and save `.config`, compiler version, and image checksum.
-- [ ] Confirm whether the target needs a separately supplied DTB or appended DTB.
+- [ ] Fork kernel source into nested repo `os/kernel/` (FR-1; mirror `twrp/` pattern, remote `trefeon/linux-samsung-j1minilte`), reusing Phase 0.1 Windows-hardening for the 13 problem paths (12 case-variant + `aux.c`).
+- [ ] Decide kernel base (K1). *(Default: vendor `j1minilte` tree + `j1minilte_defconfig` — the exact source already proven bootable via TWRP CI with byte-identical SP8835EB DTBs; archived IKGapirov recipe @ 6a377f7 is follow-up)*
+- [ ] Freeze the selected 3.10 source revision and patch set. *(vendor tree @ 4908f45a-state for M3.1; archived 7-patch set only as needed for GCC-compat milestone)*
+- [ ] Apply only patches required for SC8830/J1 Mini bring-up, each with a commit and rationale. *(expected: none for arm-eabi-4.8 milestone; documented if any)*
+- [ ] Build the baseline defconfig and save `.config`, compiler version, and image checksum. *(CI saves .config + SHA256SUMS + BUILD_INFO.txt)*
+- [ ] Confirm whether the target needs a separately supplied DTB or appended DTB. *(confirmed: SPRD dt.img, 5 DTBs, appended after ramdisk — same as stock/TWRP images)*
 
 ### Task 3.3: Device-tree and boot arguments
 
-- [ ] Derive the DTB from verified stock/recovery evidence and compare nodes against the kernel drivers.
-- [ ] Define boot arguments for console, framebuffer, storage, initramfs, and root filesystem.
-- [ ] Validate kernel image size and boot header offsets against the Samsung boot layout.
+- [ ] Derive the DTB from verified stock/recovery evidence and compare nodes against the kernel drivers. *(CI gate: dt.img DTBs byte-compare vs `device/evidence/stock-backup/dtb/dtb_00..04.dtb` — fail closed on mismatch)*
+- [ ] Define boot arguments for console, framebuffer, storage, initramfs, and root filesystem. *(base 0x0 / kernel 0x8000 / ramdisk 0x1000000 / second 0xf00000 / tags 0x100 / pgsz 2048; cmdline console=ttyS1,115200n8; busybox debug initramfs K2)*
+- [ ] Validate kernel image size and boot header offsets against the Samsung boot layout. *(parse_bootimg.py re-verification before any flash; ≤ 20 MiB size gate)*
+- [ ] Produce a flashable `boot.img` (mkbootimg, SEANDROIDENFORCE appended) + evidence pack (checksums, BUILD_INFO).
+- [ ] Flash via TWRP Install Image → KERNEL (**after user approval**), record 3 boot attempts + `last_kmsg` where possible, demonstrate rollback from stock boot backup.
 
-**Acceptance:** the device reaches a kernel-visible console or a documented first crash with a captured log.
+**Acceptance / Gate D (partial):** the device reaches a kernel-visible console or a documented first crash with a captured log; FR-6 evidence report published (`docs/build-reports/kernel-foundation-*.md`).
 
 ## Phase 4 — Linux userspace and hardware bring-up
 
