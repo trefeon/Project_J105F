@@ -17,6 +17,9 @@ device/evidence/build-artifacts/
 # Separate repo workspace (custom TWRP tree lives in its own GitHub repo)
 twrp/
 
+# Separate repo workspace (Linux kernel lives in its own GitHub repo)
+os/kernel/
+
 # Common junk
 out/
 build/
