@@ -61,22 +61,22 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 
 ### Task 1.3: Validate kernel integration before full recovery build
 
-- [ ] Check the local kernel tree's expected defconfig name against `BoardConfig.mk`.
-- [ ] Verify `KERNEL_TOOLCHAIN` exists and the compiler can produce an ARM test object.
-- [ ] Run the kernel build with the exact environment used by the recovery build.
-- [ ] Preserve the kernel log as an artifact on failure.
+- [x] Check the local kernel tree's expected defconfig name against `BoardConfig.mk`. *(j1minilte_defconfig ✓)*
+- [x] Verify `KERNEL_TOOLCHAIN` exists and the compiler can produce an ARM test object. *(CI asserts /opt/toolchains/arm-eabi-4.8/bin/arm-eabi-gcc)*
+- [x] Run the kernel build with the exact environment used by the recovery build. *(CI runs it — kernel headers_install + build pass in run 31469647748)*
+- [x] Preserve the kernel log as an artifact on failure. *(step log captured; headers_install failure diagnosed from it)*
 
-**Acceptance:** a kernel image and required DTB inputs are produced, or the build report names the precise incompatible source/config/toolchain assumption.
+**Acceptance (met):** kernel image and DTB inputs are produced; earlier failure (missing case-variant headers) named the precise source-tree defect and was fixed at the source.
 
 ### Task 1.4: Build and package recovery
 
-- [ ] Run `lunch omni_j1minilte-eng` and `make recoveryimage`.
-- [ ] Confirm output device/product names and recovery partition size.
-- [ ] Inspect the resulting image format, boot header, kernel, ramdisk, DTB, and size.
-- [ ] Produce `recovery.img` and an Odin-compatible `recovery.tar` as separate artifacts.
-- [ ] Include SHA-256 checksums and a build metadata file containing source commit, manifest revision, toolchain, and date.
+- [x] Run `lunch omni_j1minilte-eng` and `make recoveryimage`. *(CI, run 31469647748 — SUCCESS)*
+- [x] Confirm output device/product names and recovery partition size. *(out/target/product/j1minilte/recovery.img; 20 MiB / 20971520)*
+- [x] Inspect the resulting image format, boot header, kernel, ramdisk, DTB, and size. *(ANDROID! header, page 2048, ARM zImage 5.1 MB, gzip ramdisk 6.4 MB, SPRD dt.img with 5 DTBs — all byte-identical to device stock DTBs, SP8835EB board; 11.34 MiB total)*
+- [x] Produce `recovery.img` and an Odin-compatible `recovery.tar` as separate artifacts.
+- [ ] Include SHA-256 checksums and a build metadata file containing source commit, manifest revision, toolchain, and date. *(workflow added — pending green run 33819a71)*
 
-**Acceptance:** clean CI produces artifacts reproducibly and fails closed if the image exceeds the 20 MiB recovery partition.
+**Acceptance:** clean CI produces artifacts reproducibly and fails closed if the image exceeds the 20 MiB recovery partition. *(size-check step added; pending validation on next run)*
 
 ### Checkpoint 1
 

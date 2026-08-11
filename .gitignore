@@ -11,6 +11,9 @@ device/evidence/stock-backup/*.img
 device/evidence/stock-backup/*.zImage
 device/evidence/stock-backup/*.cpio.gz
 
+# Downloaded CI build artifacts (reproducible via GitHub Actions)
+device/evidence/build-artifacts/
+
 # Separate repo workspace (custom TWRP tree lives in its own GitHub repo)
 twrp/
 

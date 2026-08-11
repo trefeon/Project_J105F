@@ -2,8 +2,12 @@
 """Extract kernel, ramdisk and DTB blob(s) from a Samsung/Spreadtrum Android boot image.
 
 Boot image format (mkbootimg): page-aligned [header][kernel][ramdisk][second][dtb(img)].
-The dt.img blob is either a raw concatenation of DTBs or a QCDT-style table
-(dtbTool-sprd output, used with deviceinfo_bootimg_qcdt=true).
+The dt.img blob is one of:
+  - a raw concatenation of DTBs,
+  - a QCDT-style table (dtbTool-sprd output, magic 0xD7B7AB1E),
+  - a SPRD table ("SPRD" magic — heads a 0x800-byte area holding up to N
+    DTB slots; each 20-byte entry: [u32 tag][u32 index][u32 ?][u32 slot-offset][u32 slot-size]).
+DTB magic is big-endian 0xD00DFEED (stored as bytes D0 0D FE ED).
 """
 
 import struct, sys, os
@@ -11,6 +15,10 @@ import struct, sys, os
 
 def align(n, page):
     return ((n + page - 1) // page) * page
+
+
+def read_be32(data, off):
+    return struct.unpack_from(">I", data, off)[0]
 
 
 def main(path, outdir):
@@ -39,23 +47,32 @@ def main(path, outdir):
     open(os.path.join(outdir, "ramdisk_stock.cpio.gz"), "wb").write(ramdisk)
 
     magics = []
-    # QCDT table header magic (Qualcomm-style dt.img)
-    if len(dtb_blob) >= 8 and struct.unpack_from("<I", dtb_blob, 0)[0] == 0xD7B7AB1E:
+    # QCDT table header magic (Qualcomm-style dt.img; BE magic D7 B7 AB 1E)
+    if len(dtb_blob) >= 8 and dtb_blob[0:4] == b"\xd7\xb7\xab\x1e":
         print("dt.img: QCDT table format")
-        total = struct.unpack_from("<I", dtb_blob, 4)[0]
-        entry_count = struct.unpack_from("<I", dtb_blob, 12)[0]
         entry_size = struct.unpack_from("<I", dtb_blob, 8)[0]
+        entry_count = struct.unpack_from("<I", dtb_blob, 12)[0]
         for i in range(entry_count):
             base = 16 + i * entry_size
-            off, size = struct.unpack_from("<II", dtb_blob, base)
-            if off + size <= len(dtb_blob):
-                magics.append((off, size, f"qcdt{i:02d}"))
+            o, s = struct.unpack_from("<II", dtb_blob, base)
+            if o + s <= len(dtb_blob):
+                magics.append((o, s, f"qcdt{i:02d}"))
+    elif dtb_blob[0:4] == b"SPRD":
+        # SPRD table: "SPRD"(4) version(4) count(4), then count entries of
+        # 20 bytes: [u32 tag][u32 index][u32 ?][u32 slot_off][u32 slot_sz]
+        print("dt.img: SPRD table format")
+        entry_count = struct.unpack_from("<I", dtb_blob, 8)[0]
+        for i in range(entry_count):
+            base = 12 + i * 20
+            slot_off = struct.unpack_from("<I", dtb_blob, base + 12)[0]
+            slot_sz = struct.unpack_from("<I", dtb_blob, base + 16)[0]
+            magics.append((slot_off, slot_sz, f"sprd{i:02d}"))
     else:
-        # raw concatenated DTBs: scan for DTB magic 0xd00dfeed (page aligned)
+        # raw concatenated DTBs: scan for DTB magic (BE) 0xd00dfeed (page aligned)
         idx = 0
         i = 0
         while i + 4 <= len(dtb_blob):
-            if struct.unpack_from("<I", dtb_blob, i)[0] == 0xD00DFEED:
+            if dtb_blob[i : i + 4] == b"\xd0\x0d\xfe\xed":
                 magics.append((i, None, f"raw{idx:02d}"))
                 idx += 1
                 i += 4
@@ -63,24 +80,13 @@ def main(path, outdir):
                 i += 4
     print(f"found {len(magics)} DTB candidate(s)")
     for n, (o, s, tag) in enumerate(magics):
-        end = (
-            s
-            if s
-            else (
-                magics[n + 1][1]
-                if n + 1 < len(magics) and magics[n + 1][0]
-                else len(dtb_blob)
-            )
-        )
         if s is None:
-            # raw mode: next magic is the end; scan backwards from next magic for FDT terminator not reliable,
-            # use total size when possible; else to end of file
             nxt = magics[n + 1][0] if n + 1 < len(magics) else len(dtb_blob)
-            end = nxt
-        blob = dtb_blob[o:end]
+            s = nxt - o
+        blob = dtb_blob[o : o + s]
         # DTB total size is at offset 4 (big endian)
         if len(blob) >= 8 and blob[0:4] == b"\xd0\x0d\xfe\xed":
-            total = struct.unpack_from(">I", blob, 4)[0]
+            total = read_be32(blob, 4)
             if 0 < total <= len(blob):
                 blob = blob[0:total]
         fn = os.path.join(outdir, f"dtb_{n:02d}_{tag}.dtb")

@@ -46,6 +46,11 @@ Status: COMPLETE (2026-08-11). All three historical failures classified; fixes l
 - **Classification:** source tree (case-collision loss)
 - **Fix:** restored all 12 exact-case entries (8 netfilter uapi headers + 4 netfilter module sources) from upstream blobs (commit dfccd4fb). Full-tree verification: all 45,073 upstream paths present exact-case; remaining blob diffs vs upstream are EOL-only (upstream committed CRLF, repo stores LF).
 
+### Run 31469647748 (case-variant headers restored) — SUCCESS ✅
+- **Result:** full TWRP build green (headSha dfccd4fb). Artifact `twrp-j1minilte`: recovery.img (11,890,688 B = 11.34 MiB ≤ 20 MiB ✓), recovery.tar.
+- **Image inspection (tools/parse_bootimg.py, SPRD support added):** ANDROID! header, page 2048, ARM zImage 5,146,640 B, gzip ramdisk 6,408,655 B, dt.img = SPRD table with 5 DTBs (SP8835EB board) — **all 5 byte-identical to the DTBs extracted from the user's stock boot image** (device/evidence/stock-backup/dtb/). Hardware evidence matches the artifact.
+- **Follow-up:** workflow 33819a71 adds fail-closed 20 MiB size check + SHA256SUMS + BUILD_INFO.txt + pinned manifest snapshot.
+
 ## Runner environment (ubuntu-22.04, from run logs)
 - JDK: Zulu 8 (0.502-7) via actions/setup-java
 - Repo tool: `~/.bin/repo` (git-repo-downloads)
