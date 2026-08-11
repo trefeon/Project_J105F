@@ -28,6 +28,12 @@ Status: COMPLETE (2026-08-11). All three historical failures classified; fixes l
 - **Classification:** build environment (legacy interpreter missing)
 - **Fix:** install `python2` from the `jxu/python2` PPA, symlink `python -> python2` (commit e92c2bf2)
 
+### Run 31465742633 (python2 via jxu PPA) — FAIL
+- **Failing step:** `Install legacy Python 2 (AOSP 6.0 build scripts require it)`
+- **Root cause:** `ERROR: ppa 'jxu/python2' not found` — the PPA has been removed upstream. Deadsnakes does not build python2 for jammy+ ("older python versions require libssl<3 so they are not currently built", per deadsnakes Launchpad, verified 2026-08-11).
+- **Classification:** build environment (no packaged python2 for ubuntu-22.04 exists in 2026)
+- **Fix:** build Python 2.7.18 from source (python.org tarball, `--prefix=/usr/local/python2.7`, symlink `python`/`python2`) — commit 20468788. zlib/bz2 modules build from the AOSP dev packages already installed.
+
 ## Runner environment (ubuntu-22.04, from run logs)
 - JDK: Zulu 8 (0.502-7) via actions/setup-java
 - Repo tool: `~/.bin/repo` (git-repo-downloads)
@@ -38,5 +44,5 @@ Status: COMPLETE (2026-08-11). All three historical failures classified; fixes l
 `gh run view <run-id> --log-failed` — earliest actionable error captured for each run; no guessed fixes (each change was made only after observing the specific error).
 
 ## Next
-- Await run triggered by e92c2bf2; iterate on any further observed failures.
+- Await run triggered by 20468788 (python2.7 source build); iterate on any further observed failures.
 - After first clean build: pin manifest revision, add size-check + checksums + metadata (FR-3), then device test.
