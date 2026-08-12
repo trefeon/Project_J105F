@@ -1,0 +1,10 @@
+# Stock partition images — checksums (SHA-256)
+
+Captured 2026-08-12 from the device via the existing TWRP 3.7.0_9-0-notnoelchannel (`adb root` shell), firmware `J105FXXS0ARD2`, device `j1minilte` (sc8830). Images stay LOCAL ONLY (gitignored) — never commit them.
+
+ab58375c757e71d3e6ef662713b6233b1d1c1e3d0d51eb30913aef12a9d5738b  boot_stock.img
+a8c006758b060d0a8142e9a98a965e12d1032285b048be0c1b797bb35aa7070b  efs.img
+3bb43e392b9475d6990ac8fa85ecfd9750fd6062af01463fb679881bb1fef9b7  prodnv.img
+6279f91243653717fe061bc5ff87c60a814b06d6a0bdee76e01625f87a743116  recovery_stock.img
+
+MicroSD copies also exist at `/external_sd/backup/` on the phone's microSD.

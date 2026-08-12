@@ -10,7 +10,7 @@ the git history, and CI run metadata on 2026-08-12.
 | Task | Date | Status | Result | Ref |
 |---|---|---|---|---|
 | A1 | 2026-08-11 | done | ROADMAP committed as the execution spine; supersede banners + corrections C2/C3/C4 applied inline | `64ae684` |
-| A2 | 2026-08-11 | blocked | Rollback set missing — only `dtb/` survives; re-capture p17/p20/p21 to microSD + PC before any flash (R2/R5, `HUMAN GATE`) | `device/evidence/stock-backup/` |
+| A2 | 2026-08-12 | done | Rollback set created: dd of p21/p20/p17/p18 → PC `stock-backup/` (recovery/boot exactly 16,777,216 B — stop rule passed; efs 20 MiB, prodnv 5 MiB match table); CHECKSUMS.sha256 + README committed; TWRP backup System 2.09 GB + Data 1.29 GB (.sha2) pulled to PC; cmdline/dmesg/df re-captured real (`console=null`, bootloader J105FXXS0ARD2); TWRP identified as 3.7.0_9-0-notnoelchannel | `stock-backup/` (gitignored imgs), run `db9a2d6b` |
 | A3 | 2026-08-11 | blocked | Live `/proc/partitions` applied as C4 (p20/p21 = 16,384 KiB); heimdall PIT capture outstanding (needs phone in Download Mode) | `device/evidence/partitions.txt` |
 | A4 | 2026-08-11 | done | BoardConfig BOOT+RECOVERY partition sizes 16777216 with evidence comment | twrp `0f7f3586` |
 | A4b | 2026-08-11 | done | kernel.yml size gate tightened to 16777216 (fail closed) | kernel `f31f090a` |
@@ -27,8 +27,6 @@ the git history, and CI run metadata on 2026-08-12.
 | G1 | 2026-08-11 | done | CI-first host decision (D5); kernel builds reproducibly on ubuntu-22.04 | kernel repo |
 | G2 | 2026-08-11 | done | Kernel forked to `trefeon/linux-samsung-j1minilte` (vendor tree, K1) | `90cfeaa5` |
 | G3 | 2026-08-11 | done | boot.img 6.53 MiB assembled in CI; fail-closed VERIFY PASS (header/size/dt.img byte-identical) | runs `31519306192`/`31520084805` |
-| G4 | 2026-08-11 | blocked | First kernel flash attempt — needs A2 rollback set + human approval (`HUMAN GATE`); restore `boot_stock.img` to p20 for rollback | — |
+| G4 | 2026-08-11 | blocked | First kernel flash attempt — rollback set now READY (A2 done 2026-08-12); awaiting human approval for the flash session (`HUMAN GATE`); restore `boot_stock.img` to p20 for rollback | — |
 
-**Next actionable item:** A2 (human + phone): dump `RECOVERY` p21, `KERNEL` p20, `efs` p17, `prodnv` p18 to microSD → PC
-`device/evidence/stock-backup/` (+ CHECKSUMS.sha256, README, TWRP full backup, re-capture cmdline/dmesg/df).
-Then A3 PIT, E1 completion, E2 flash.
+**Next actionable items:** A3 (heimdall PIT, phone in Download Mode — optional, `partitions.txt` already authoritative) → E2 flash of custom recovery (human "yes" required) → G4 kernel flash (human "yes" required).

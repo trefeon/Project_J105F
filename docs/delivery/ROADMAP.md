@@ -4,8 +4,8 @@
 **Deliverable 1 (MVP):** a reproducible, self-branded TWRP recovery built from source committed in this project
 **Deliverable 2 (experimental):** a bootable postmarketOS/Alpine Linux port
 
-**Status:** A1/A4/A4b done, A2+A3 human-gated (rollback set + PIT) · B1–B3 done · C1–C3 done (C3 incl. `recovery.tar.md5` 2026-08-12) · D1–D2 done, D3 deferred · E1 pre-flight parse recorded, device work human-gated · G1–G3 done (M3.1/M3.2), G4 human-gated · H/I not started · **no device flash performed yet**
-**Last evidence refresh:** 2026-08-12 (C3 `recovery.tar.md5` verified; E1 pre-flight parse recorded)
+**Status:** A2 **DONE** (rollback set + evidence re-captured, 2026-08-12) · A1/A4/A4b done · A3 partial (heimdall PIT outstanding) · B1–B3 done · C1–C3 done (C3 incl. `recovery.tar.md5`) · D1–D2 done, D3 deferred · E1 pre-flight parse recorded — E2 flash unblocked pending human "yes" · G1–G3 done (M3.1/M3.2) — G4 kernel flash unblocked pending human "yes" · H/I not started · **no image flashed yet**
+**Last evidence refresh:** 2026-08-12 (A2 rollback set: 4× dd images + TWRP System/Data backup on PC; C8 captures fixed; TWRP identified as 3.7.0_9-0-notnoelchannel)
 
 ---
 
@@ -184,7 +184,7 @@ Cheap, safe, unblocks everything. No device writes.
   `recovery_stock.img` must be exactly 16,777,216 bytes. If it is not, **stop** — the partition map is wrong
   and R1 needs re-analysis before anything else.
 - **If it fails:** No backup, no flash. Stages E and G+ remain hard-blocked.
-- [ ] Done — **NOT DONE.** `stock-backup/` holds only `dtb/`; no `.img` rollback files (C5). **Hard-blocked on this before any flash (R2/R5).**
+- [x] Done — **2026-08-12.** Live device TWRP was identified as **3.7.0_9-0-notnoelchannel** (not 3.0.3-0 as previously assumed; docs corrected). Dumped `RECOVERY` p21, `KERNEL` p20, `efs` p17, `prodnv` p18 to microSD → pulled to `device/evidence/stock-backup/`: recovery/boot exactly **16,777,216 B** (stop rule passed — partition map live-confirmed, R1 re-validated), efs 20,971,520 B, prodnv 5,242,880 B — all match the ROADMAP table. `CHECKSUMS.sha256` + `README.md` committed. TWRP full backup (System 2.09 GB + Data 1.29 GB, each with `.sha2`) completed on microSD and pulled to PC. C8 captures re-done with real data: `cmdline.txt` (`console=null loglevel=0`, `androidboot.bootloader=J105FXXS0ARD2`, `hw_revision=3`, `mem=1024M`), `dmesg.txt` (441 KB), `df.txt`. EFS additionally covered by the raw dd (p17). TWRP CLI `print`/long ORS runs can wedge the recovery UI (observed twice) — use CLI backup sparingly; device recovered with `adb reboot recovery`; no data at risk (all writes were to microSD only).
 
 #### A3 — Establish the authoritative partition geometry
 - **Depends on:** A2
@@ -354,7 +354,7 @@ C1 size check green · the human is physically present and has explicitly approv
   read both back.
 - **Accept:** Identity matches, header is sane, rollback command is verified correct.
 - **Verify:** `python tools/parse_bootimg.py <recovery.img>` output recorded in the log.
-- [ ] Done — pre-flight tooling ready (`tools/parse_bootimg.py` + kernel repo's `pack_bootimg.py`); local parse **recorded 2026-08-12** on the final image: pgsz 2048, kernel 5,146,640 B, ramdisk 6,408,655 B, DTB blob @ 0xb06800, 5× DTBs SP8835EB, sizes byte-identical to stock (`parsed-e1/`); identity + flash/rollback walkthrough still need the phone — blocked on A2 + human.
+- [ ] Done — pre-flight tooling ready (`tools/parse_bootimg.py` + kernel repo's `pack_bootimg.py`); local parse **recorded 2026-08-12** on the final image: pgsz 2048, kernel 5,146,640 B, ramdisk 6,408,655 B, DTB blob @ 0xb06800, 5× DTBs SP8835EB, sizes byte-identical to stock (`parsed-e1/`); **flash + rollback commands written side by side at `docs/delivery/e1-flash-commands.md` (2026-08-12)**; remaining: identity + partition assertions on the live device, then human walkthrough — unblocked now that A2 is done.
 
 #### E2 — Flash and first boot
 - **Depends on:** E1 + explicit human "yes"

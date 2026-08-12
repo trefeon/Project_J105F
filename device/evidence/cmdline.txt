@@ -1,2 +1,2 @@
-/system/bin/sh: cat: /proc/cmdline: Permission denied
+ mem=1024M init=/init ram=1024M chip.uid=0x8091d482,0x902a930b lcd_id=ID066108 lcd_base=9effc000 initrd=0x85500000,0x61c9ee tlfixnv=0x8aa42000,0x90000 tlruntimenv=0x8aad2000,0xb4000 bootmode=2 sec_debug.reset_reason=0x1A2B3C11 hw_revision=3 muic_rustproof=1 sec_debug.level=0 androidboot.debug_level=0x4f4c console=null loglevel=0 sec_log=0xfff00@0x86b00000 androidboot.bootloader=J105FXXS0ARD2  androidboot.emmc_checksum=3 connie=SM-J105F_OPEN_EUR_77478c11810a83fc25c8bbbc5ecc5f1f cordon=d9be01fc7ef9448139738cfd69ca7f0e androidboot.serialno=42002714ee5ac300 calmode=0 fgu_init=0,0
 

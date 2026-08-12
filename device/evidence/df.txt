@@ -1,4 +1,20 @@
-Filesystem               Size     Used     Avail     Free   Blksize
+Filesystem           1K-blocks      Used Available Use% Mounted on
 
--h: No such file or directory
+tmpfs                   470596        16    470580   0% /dev
+
+tmpfs                   470596        20    470576   0% /tmp
+
+/dev/block/mmcblk0p27
+
+                       4935476   1686620   3232472  34% /data
+
+/dev/block/mmcblk0p27
+
+                       4935476   1686620   3232472  34% /sdcard
+
+/dev/block/mmcblk0p24
+
+                        197472       780    192596   0% /cache
+
+/dev/block/mmcblk1p1   3860544   2185792   1674752  57% /external_sd
 

@@ -11,6 +11,9 @@ device/evidence/stock-backup/*.img
 device/evidence/stock-backup/*.zImage
 device/evidence/stock-backup/*.cpio.gz
 
+# TWRP full backups pulled off the device — PRIVATE (userdata, personal data)
+device/evidence/stock-backup/TWRP/
+
 # Downloaded CI build artifacts (reproducible via GitHub Actions)
 device/evidence/build-artifacts/
 
@@ -26,3 +29,4 @@ build/
 *.log
 .DS_Store
 Thumbs.db
+.lean-ctx/
