@@ -4,8 +4,8 @@
 **Deliverable 1 (MVP):** a reproducible, self-branded TWRP recovery built from source committed in this project
 **Deliverable 2 (experimental):** a bootable postmarketOS/Alpine Linux port
 
-**Status:** Stage A in progress (this commit: A1) · TWRP CI **green** (B1–B3, C2, D1–D2 done) · Linux kernel foundation M3.1/M3.2 done via revised G-stage (CI-first, not pmbootstrap) · **no device flash performed yet**
-**Last evidence refresh:** 2026-08-11 (post-M3.2)
+**Status:** A1/A4/A4b done, A2+A3 human-gated (rollback set + PIT) · B1–B3 done · C1–C3 done (C3 incl. `recovery.tar.md5` 2026-08-12) · D1–D2 done, D3 deferred · E1 pre-flight parse recorded, device work human-gated · G1–G3 done (M3.1/M3.2), G4 human-gated · H/I not started · **no device flash performed yet**
+**Last evidence refresh:** 2026-08-12 (C3 `recovery.tar.md5` verified; E1 pre-flight parse recorded)
 
 ---
 
@@ -307,7 +307,7 @@ Implements PRD FR-2, FR-3. This is what makes the image safe to hand to a human.
   form first and fall back. Document which Odin version was used for the eventual successful flash.
 - **Accept:** Both artifacts exist; the flash instructions name a specific Odin version.
 - **Verify:** `tar -tf recovery.tar` lists exactly `recovery.img`.
-- [ ] Done — **PARTIAL.** Plain `recovery.tar` produced and verified (11,898,880 B, sha256 `98e2690f…`); `recovery.tar.md5` variant not yet produced. Flash tool decision pending the E-stage (Odin version to be named in release notes).
+- [x] Done — 2026-08-12. Plain `recovery.tar` (11,898,880 B) + `recovery.tar.md5` (tar with 32-char MD5 appended, delta exactly 32 B, re-hash `6ba01d34e4661059329b4750d5ba4ca3` matches; `tar -tf` lists exactly `recovery.img`). The remaining clause — "flash instructions name a specific Odin version" — is inherently device-dependent and stays OPEN until E2; release notes (F1) will name the winner per D-2.
 
 ---
 
@@ -354,7 +354,7 @@ C1 size check green · the human is physically present and has explicitly approv
   read both back.
 - **Accept:** Identity matches, header is sane, rollback command is verified correct.
 - **Verify:** `python tools/parse_bootimg.py <recovery.img>` output recorded in the log.
-- [ ] Done — pre-flight tooling ready (`tools/parse_bootimg.py` + kernel repo's `pack_bootimg.py`), rollback command defined; blocked on A2/C1 + human.
+- [ ] Done — pre-flight tooling ready (`tools/parse_bootimg.py` + kernel repo's `pack_bootimg.py`); local parse **recorded 2026-08-12** on the final image: pgsz 2048, kernel 5,146,640 B, ramdisk 6,408,655 B, DTB blob @ 0xb06800, 5× DTBs SP8835EB, sizes byte-identical to stock (`parsed-e1/`); identity + flash/rollback walkthrough still need the phone — blocked on A2 + human.
 
 #### E2 — Flash and first boot
 - **Depends on:** E1 + explicit human "yes"

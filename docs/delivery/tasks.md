@@ -10,8 +10,8 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 
 - Hardware evidence identifies the tested unit as `j1miniltexx`, `sc8830`, **dual-SIM (DSDS)**, ~1 GB RAM (941,892 kB), firmware `J105FXXS0ARD2`.
 - The TWRP source was copied into `twrp/device/samsung/j1minilte` and `twrp/kernel/samsung/j1minilte`.
-- The nested TWRP repository currently has a broken working-tree transition: source files were deleted from the repository root while replacement copies are untracked under `device/` and `kernel/`. This must be resolved before treating the source layout as committed.
-- GitHub Actions has had repeated failures. The exact failing step must be obtained from the run log before making another speculative workflow change.
+- The nested TWRP repository is **clean and committed** (`twrp/` → `twrp_j1minilte`, HEAD `2d63e410`); Phase 0 is obsolete (ROADMAP C1). Same for `os/kernel/` → `linux-samsung-j1minilte`.
+- GitHub Actions has had repeated failures. The exact failing step must be obtained from the run log before making another speculative workflow change. *(resolved: 6 root causes fixed sequentially, see `docs/build-reports/ci-investigation.md`; both repos green)*
 - The Linux target is substantially higher risk: the available VPS was previously determined too small for a full AOSP build, and the kernel/DTB/device bring-up remains incomplete.
 
 ## Non-goals
@@ -53,7 +53,7 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 
 ### Task 1.2: Make the build environment explicit
 
-- [ ] Pin the manifest revision or record the resolved revision after sync. *(do after first clean build)*
+- [x] Pin the manifest revision or record the resolved revision after sync. *(manifest-pinned.xml captured from the green build, committed with the CI artifacts; D-1 settled at C2)*
 - [x] Use a supported JDK and explicitly install every required legacy host dependency.
 - [x] Add Python compatibility only if the failure proves it is required; avoid speculative packages. *(python2 added after run 31465251155 proved it)*
 - [x] Make swap creation disk-aware and fail clearly when there is insufficient free disk.
@@ -76,7 +76,7 @@ Produce a reproducible, genuinely custom recovery and then a bootable Linux/pmOS
 - [x] Confirm output device/product names and recovery partition size. *(out/target/product/j1minilte/recovery.img; 11.34 MiB — fits the real 16 MiB partition per `/proc/partitions`; BoardConfig's 20971520 claim corrected by ROADMAP C4)*
 - [x] Inspect the resulting image format, boot header, kernel, ramdisk, DTB, and size. *(ANDROID! header, page 2048, ARM zImage 5.1 MB, gzip ramdisk 6.4 MB, SPRD dt.img with 5 DTBs — all byte-identical to device stock DTBs, SP8835EB board; 11.34 MiB total)*
 - [x] Produce `recovery.img` and an Odin-compatible `recovery.tar` as separate artifacts.
-- [ ] Include SHA-256 checksums and a build metadata file containing source commit, manifest revision, toolchain, and date. *(workflow added — pending green run 33819a71)*
+- [x] Include SHA-256 checksums and a build metadata file containing source commit, manifest revision, toolchain, and date. *(SHA256SUMS + BUILD_INFO.txt + manifest-pinned.xml published with TWRP and kernel artifacts; re-verified locally, ROADMAP C2)*
 
 **Acceptance:** clean CI produces artifacts reproducibly and fails closed if the image exceeds the recovery partition. *(size-check step active; gate tightened to the real 16,777,216 B per ROADMAP C4/A4/C1 — twrp repo 0f7f3586, green run 31524994619)*
 
