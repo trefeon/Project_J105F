@@ -4,6 +4,14 @@
 **Status:** Research complete — groundwork for "port an existing project, then remake it"
 **Local reference copies:** all GitHub repos cloned into `reference/` (see inventory below)
 
+> ⚠️ **2026-08-14 correction (exact-model):** this document's §1 originally labeled the platform
+> "SC8830" and treated the 3G sibling `j1mini3g` as "same sharkls platform". Both claims are **wrong**
+> and have been corrected inline. The unit is the **LTE** SM-J105F/DS — SoC **SC9830I** (SharkLS,
+> SCX35L family), board SP8835EB. `sc8830` is the platform-**family** name shared by the whole
+> SCX35(L) family (3G SC8830 *and* LTE SC9830i), not the 3G chip. The 3G `j1mini3g` (SM-J105H/B)
+> runs a different kernel platform (`ARCH_SCX30G`) and is a **reference recipe, not a base**.
+> Full evidence: `docs/research/exact-model-findings.md`.
+
 ---
 
 ## 1. Device identity (verified, not guessed)
@@ -12,10 +20,10 @@
 |---|---|---|
 | Model | SM-J105F (Galaxy J1 Mini, 2016) | `system/build.prop` in dump |
 | Codename | `j1minilte` (product `j1miniltexx`) | dump `build.prop` |
-| Platform | Spreadtrum/Unisoc **SC8830** (platform name: **sharkls**, family SCX35L) | dump `ro.board.platform=sc8830`, kernel tree `scx35l/sharkls` |
-| CPU | 4× ARM Cortex-A7 @ 1.2 GHz (32-bit, ARMv7) | devicespecifications.com |
+| Platform | Spreadtrum/Unisoc **SC9830I** (LTE; platform **sharkls**, family SCX35L; `sc8830` = family name, *not* the chip) | dump `ro.chipname=SC9830I`, `ro.board.platform=sc8830`, kernel tree `scx35l/sharkls` |
+| CPU | 4× ARM Cortex-A7 @ **1.5 GHz** (32-bit, ARMv7) | devicespecifications.com |
 | GPU | Mali-400 MP2 | devicespecifications.com |
-| RAM | 768 MB (some variants 1 GB) | devicespecifications / gsmarena |
+| RAM | **1 GB** (941,892 kB confirmed on this unit) | `device/evidence/meminfo.txt`, live ADB/TWRP |
 | Storage | 8 GB eMMC + microSD (up to 128 GB, shares SIM2 slot) | phonebunch |
 | Display | 4.0" TFT 480×800 | devicespecifications |
 | Stock OS | Android 5.1.1 Lollipop (API 22), build **J105FXXS0ARD2** | dump build.prop / play-store-api |
@@ -23,7 +31,12 @@
 | Battery | 1500 mAh removable | — |
 | Boot | Samsung legacy boot — `KERNEL` partition (`/dev/block/platform/sdio_emmc/by-name/KERNEL`, mmcblk0p20 on sibling J3), boot image needs `SEANDROIDENFORCE` suffix | Mardy's halium J3 notes |
 
-> ⚠️ Sibling models matter: **SM-J105H/B** = codename `j1mini3g` (also SC8830, same sharkls platform). Much of the working Linux/ROM work on GitHub is for `j1mini3g` and transfers to `j1minilte` with minor changes. **SM-J106\*** (J1 Mini Prime, `j1minivelte`, SC9830) and **SM-J120\*** (J1 2016, `j1xlte`, Exynos 3475) are DIFFERENT SoCs — ignore them (j1xlte is Exynos, not Spreadtrum).
+> ⚠️ Sibling models matter — **corrected 2026-08-14:** **SM-J105H/B** = codename `j1mini3g` — this is the
+> **3G** SC8830 sibling on a **different kernel platform** (`ARCH_SCX30G`, no `SIPC_LTE`). Our SM-J105F
+> is the **LTE SC9830i** variant (`ARCH_SCX35L` + `MACH_J1MINILTE` + `MACH_SP9830I` + `SIPC_LTE`).
+> The j1mini3g Linux/ROM work is a **reference recipe**, not a drop-in base — the kernel configs do not
+> match our hardware. **SM-J106\*** (J1 Mini Prime, `j1minivelte`, SC9830) and **SM-J120\*** (J1 2016,
+> `j1xlte`, Exynos 3475) are DIFFERENT SoCs — ignore them (j1xlte is Exynos, not Spreadtrum).
 
 ---
 
@@ -77,22 +90,22 @@
   - **CM 14.1 (Android 7.1)**: `j1minilte_defconfig` exists in the cm-14.1 kernel; 4PDA thread (886192) has CM12/CM13 porting links for the J105 family; users reported PAC-ROM / Resurrection Remix (7.1-based) running on J105B via ports.
   - **LineageOS 15.1 (Android 8.1)**: djeman's full sharkls platform tree (kernel + sharkls-common + vendor) booted Android 8.1 on the J3 (j3xlte/j3xnlte) — same SoC platform, same `fstab.sc8830`, same HALs. **Port = new per-device tree (`device/samsung/j1minilte`), reuse sharkls-common + kernel + vendor.**
   - **TWRP 3.0.3-0** exists for SM-J105 (XDA, Odin-flashable) — quirky but real (known bugs: MTP broken, "not SEAndroid enforcing" warning; workaround exists).
-- **Reality check**: 768 MB RAM — Android 7.1 is usable but tight; Android 8.1 is heavy. CM12.1/CM13 (5.1/6.0) would be the *snappiest* custom ROMs; 14.1 is the sweet spot for feature balance.
+- **Reality check**: 1 GB RAM (941,892 kB confirmed) — Android 7.1 is usable but tight; Android 8.1 is heavy. CM12.1/CM13 (5.1/6.0) would be the *snappiest* custom ROMs; 14.1 is the sweet spot for feature balance.
 
 ### Path B — Real Linux: postmarketOS (Alpine Linux on the phone) ✅ most realistic "Linux OS"
-- postmarketOS has a **device port for the sibling `samsung-j1mini3g` (SM-J105H/B, same SC8830 SoC)**: kernel package **`linux-samsung-j1mini3g` 3.10.106-r8** (armv7, built 2025-04-02) — a fork of the Samsung 3.10 kernel with pmOS patches.
-- `samsung-j1minilte` has a wiki page but **no confirmed device/kernel packages** → for our exact J105F we either (a) verify/port the `j1mini3g` device package (same SoC, minor variant differences), or (b) create a `j1minilte` device package in pmaports using the same kernel recipe.
-- Install model: flash pmOS rootfs to the system partition via TWRP/Odin + the 3.10 kernel → a genuine **Linux 3.10 distro** with Alpine. GUI: XFCE4/Sxmo/i3 (Plasma Mobile is too heavy for 768 MB).
+- postmarketOS has a **device port for the 3G sibling `samsung-j1mini3g` (SM-J105H/B, SC8830 — NOT our SoC)**: kernel package **`linux-samsung-j1mini3g` 3.10.106-r8** (armv7, built 2025-04-02) — a fork of the Samsung 3.10 kernel with pmOS patches. **Use it as a recipe reference only** (kernel config, patches, deviceinfo structure) — the config/DTB set is for SCX30G, not our SCX35L.
+- `samsung-j1minilte` has a wiki page but **no confirmed device/kernel packages** → for our exact J105F (LTE/SC9830i) we either (a) port the `j1mini3g` *recipe* to a `j1minilte` device package (adjusting config/DTBs to SCX35L/SC9830i), or (b) create a `j1minilte` device package in pmaports using our own kernel base.
+- Install model: flash pmOS rootfs to the system partition via TWRP/Odin + the 3.10 kernel → a genuine **Linux 3.10 distro** with Alpine. GUI: XFCE4/Sxmo/i3 (Plasma Mobile is too heavy for 1 GB).
 - This is the classic "Linux on old phone" route and the most achievable full-Linux goal.
 
 ### Path C — Halium / Ubuntu Touch (Lomiri) 🔶 possible, heavy
 - Halium 7.1 port was proven on the **same SoC platform** (Samsung J3 `j3xnlte`): boot image + system image built, LXC container boots, libhybris tests mostly pass (camera works in the UT camera app; audio HAL was the pain point — `audio.primary.sc8830.so`).
 - Blueprint: halium-7.1 + LOS 14.1 tree for sharkls + our j1minilte device tree + `SEANDROIDENFORCE` boot suffix.
-- Ubuntu Touch on 768 MB RAM is rough but there are success stories with Sxmo-class usage. Given RAM, treat as stretch goal.
+- Ubuntu Touch on 1 GB RAM is rough but there are success stories with Sxmo-class usage. Given RAM, treat as stretch goal.
 
 ### Path D — Mainline Linux (modern kernel, e.g. 6.x) ❌ not realistic
-- Mainline `sprd` support covers **SC9836/SC9860/SC9863A/UMS512** (arm64, newer Unisoc) — **SC8830 has zero mainline support** (no clk/pinctrl/PMIC/GPU/display drivers for it; even the arm32 sprd mach code was never merged).
-- Porting SC8830 to a modern kernel = writing drivers from scratch (months–years of kernel work). **Not recommended** — the Samsung 3.10 fork (used by pmOS) IS the pragmatic "Linux" for this hardware.
+- Mainline `sprd` support covers **SC9836/SC9860/SC9863A/UMS512** (arm64, newer Unisoc) — the **SCX35L family (SC8830/SC9830i) has zero mainline support** (no clk/pinctrl/PMIC/GPU/display drivers for it; even the arm32 sprd mach code was never merged).
+- Porting SC8830/SC9830i to a modern kernel = writing drivers from scratch (months–years of kernel work). **Not recommended** — the Samsung 3.10 fork (used by pmOS) IS the pragmatic "Linux" for this hardware.
 
 ### Path E — Linux via chroot on stock Android (easiest, no flashing risk) ✅ zero-risk
 - Termux (old builds work on 5.1) / UserLAnd / LinuxDeploy / **Droidspaces** (explicitly supports `j1minilte`, fixed ramfs detection for it in 2026) → Debian/Ubuntu/Arch rootfs + X11 over VNC. No bootloader risk. Good for learning Linux-on-device before committing to Path A/B.
@@ -108,8 +121,8 @@
    - Use `reference/kernels/kernel_samsung_sharkls_gj105f` (cm-14.1, has j1minilte_defconfig) for 14.1, or djeman's lineage-15.1 kernel for 15.1.
    - Vendor: extract blobs from our `samsung_j1minilte_dump/system` (or fresh firmware dump via dumpyara) + `android_vendor_sprd_gj105f` for the open HAL sources. Apply `sharkls-common/patches/apply_sprd-diff.sh` (frameworks patches) — known required for system image to build.
    - Kernel defconfig: `j1minilte_defconfig` → `make ARCH=arm j1minilte_defconfig` with arm-eabi-4.8/4.9 toolchain.
-3. **Phase 2 (Linux OS — port pmOS `j1mini3g` to `j1minilte`):**
-   - Take the `samsung-j1mini3g` pmaports device + kernel recipes (kernel 3.10.106 fork), clone to `samsung-j1minilte`, adjust for J105F (RAM 768 MB, modem/radio differences, display/panel DTS if any).
+3. **Phase 2 (Linux OS — port pmOS `j1mini3g` *recipe* to `j1minilte`):**
+   - Take the `samsung-j1mini3g` pmaports device + kernel recipes (kernel 3.10.106 fork) as a **structural reference only**, clone to `samsung-j1minilte`, and replace the SoC-specific parts with our SCX35L/SC9830i base: `j1minilte_linux_defconfig` (already carries `ARCH_SCX35L + MACH_J1MINILTE + MACH_SP9830I + SIPC_LTE`), our 5 stock SP8835EB DTBs, 1 GB RAM, LTE modem/radio differences, display/panel DTS as needed.
    - Boot via TWRP: flash `boot.img` (kernel) + system rootfs; or use Odin for the kernel image with SEANDROIDENFORCE.
 4. **Phase 3 (remake):** this is where "remake it" happens — fork the ported tree into our own project, rename branding, customize the UI/framework, add features. This repo (`Project_J105F`) becomes the home of the forked source.
 
@@ -139,13 +152,13 @@
 - Mainline status: lkddb `CONFIG_ARCH_SPRD` (arm64, 4.1+); LWN patchsets for Sharkl/SC9860; tuxphones.com article (Unisoc mainline activity — none for SC8830)
 - Halium: `Halium/projectmanagement#261` (j3xnlte halium-7.1 checklist); mardy.it blog "Notes on porting the Samsung J3 to Halium + Ubports" (KERNEL partition mmcblk0p20, SEANDROIDENFORCE, fstab.sc8830)
 - XDA: `[RECOVERY] TWRP 3.0.3-0 for Samsung J1 Mini (SM-J105)` (3545821), `[CLOSED] twrp for j1 mini (sm-j105m/ds...)` (4637839), "is there any tried custom Rom for sm-j105h" (3833693)
-- Specs: devicespecifications.com (SC8830/768 MB), gsmarena, phonebunch, samfw.com
+- Specs: devicespecifications.com (lists J1 mini as SC8830/768 MB — that is the 3G SM-J105B; our SM-J105F is SC9830i/1 GB, see `docs/research/exact-model-findings.md`), gsmarena, phonebunch, samfw.com
 
 ## 7. Unknowns / open questions
 
 1. Exact pmOS status of `samsung-j1minilte` (wiki page exists; package index unverifiable behind anti-bot). Verify via `pmbootstrap init` when you set up pmOS.
 2. Whether the CM 14.1 `j1minilte_defconfig` was ever booted on hardware (kernel exists; ROM evidence on 4PDA/XDA is anecdotal — J105B ran PAC-ROM/RR ports).
-3. J105F vs J105H/B hardware deltas (RAM 768 MB vs 1 GB, radio bands, panel driver) — needed for both ROM and pmOS ports; answerable from the stock firmware/dump once on a Linux build box.
+3. J105F vs J105H/B hardware deltas — **mostly resolved 2026-08-14**: our J105F = **1 GB RAM, SC9830i LTE (SCX35L)**; J105H/B = **768 MB, SC8830 3G (SCX30G)**. Remaining deltas (radio bands, panel driver) answerable from the stock firmware/dump once on a Linux build box.
 4. TWRP 3.0.3-0 quirks (MTP, SEAndroid warning) — modern TWRP could be rebuilt from `NotNoelChannel` trees instead.
 5. dmca risk: remaining `android_vendor_sprd` forks may vanish; take local backups.
 

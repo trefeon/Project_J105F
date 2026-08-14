@@ -58,7 +58,7 @@ authoritative; treat the older plan documents as reference material only.
 | Property | Value | Source |
 |---|---|---|
 | Model / device / product | `SM-J105F` / `j1minilte` / `j1miniltexx` | `getprop.txt` |
-| Platform / bootloader board | `sc8830` / `SC9830I` | `getprop.txt`, `BoardConfig.mk` |
+| Platform / bootloader board | `sc8830` (**family name** — SoC is **SC9830i LTE**/SharkLS) / `SC9830I` | `getprop.txt`, `BoardConfig.mk`, `docs/research/exact-model-findings.md` |
 | Firmware (PDA) | `J105FXXS0ARD2`, Android 5.1.1, `LMY47V` | `getprop.txt` |
 | CSC | `XID` — Indonesia | `getprop.txt` |
 | **SIM configuration** | **Dual-SIM (DSDS)** — `ro.multisim.simslotcount=2`, `libsec-ril-dsds.so` | `getprop.txt` |

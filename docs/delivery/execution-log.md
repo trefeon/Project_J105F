@@ -29,7 +29,9 @@ the git history, and CI run metadata on 2026-08-12.
 | G3 | 2026-08-11 | done | boot.img 6.53 MiB assembled in CI; fail-closed VERIFY PASS (header/size/dt.img byte-identical) | runs `31519306192`/`31520084805` |
 | G4 | 2026-08-11 | blocked | First kernel flash attempt — rollback set now READY (A2 done 2026-08-12); awaiting human approval for the flash session (`HUMAN GATE`); restore `boot_stock.img` to p20 for rollback | — |
 
-**Next actionable items:** A3 (heimdall PIT, phone in Download Mode — optional, `partitions.txt` already authoritative) → E2 flash of custom recovery (human "yes" required) → G4 kernel flash (human "yes" required).
+**Next actionable items:** (phone absent) → on phone return: capture LTE modem CP set (`docs/plans/modem-firmware-capture-plan.md`) → A3 heimdall PIT (Download Mode — optional) → E2 flash of custom recovery (human "yes") → G4 kernel flash (human "yes").
+
+**2026-08-14 (exact-model research, no phone):** two parallel research lanes (local-dump mining + web) confirmed the unit as **SM-J105F/DS LTE** — SoC **SC9830i** (SharkLS, SCX35L family), board SP8835EB, 1 GB RAM; `sc8830` strings are the platform-family name, **not** the 3G chip; the 3G sibling `j1mini3g` (SM-J105H/B) is a different kernel platform (`ARCH_SCX30G`), reference recipe only. Artifacts: `docs/research/exact-model-findings.md` (new), stale `SC8830-as-chip` claims corrected in `docs/research/J105F-CustomOS-Research.md`, kernel README identity section (kernel repo `73a2f74a`), ROADMAP identity row clarified, `docs/plans/modem-firmware-capture-plan.md` (new — 12 CP partitions to capture pre-flash).
 
 **2026-08-14 correction (C3/E1 artifacts):** the `twrp-j1minilte/` bundle (recovery.img + recovery.tar + recovery.tar.md5) was discovered to contain a **stale first-green image** — hash `9869d726`, run `31469647748`, commit `dfccd4fb`, **pre-branding** (`0_j1mini_custom` in ramdisk). Replaced with the gated HEAD artifact `799b5e10` (run `31524994619`, commit `0f7f3586`, branding `0_j105f-custom`); `recovery.tar` + `recovery.tar.md5` rebuilt from it (md5 `52067f65…`). `e1-flash-commands.md` corrected accordingly. Stock rollback images untouched.
 
