@@ -4,7 +4,7 @@
 **Deliverable 1 (MVP):** a reproducible, self-branded TWRP recovery built from source committed in this project
 **Deliverable 2 (experimental):** a bootable postmarketOS/Alpine Linux port
 
-**Status:** A2 **DONE** (rollback set + evidence re-captured, 2026-08-12) · A1/A4/A4b done · A3 partial (heimdall PIT outstanding) · B1–B3 done · C1–C3 done (C3 incl. `recovery.tar.md5`) · D1–D2 done, D3 deferred · E1 pre-flight parse recorded — E2 flash unblocked pending human "yes" · G1–G3 done (M3.1/M3.2) — G4 kernel flash unblocked pending human "yes" · **H1 done 2026-08-14 (initramfs boots to shell, CI-verified; boot.img `e3125677` @ `f649d5a5`)** · H2/H3/H5/H6 research pack written (`docs/research/driver-bring-up-h2h3.md`) · I not started · **no image flashed yet**
+**Status:** A2 **DONE** (rollback set + evidence re-captured, 2026-08-12) · A1/A4/A4b done · A3 partial (heimdall PIT outstanding) · B1–B3 done · C1–C3 done (C3 incl. `recovery.tar.md5`) · **D1–D3 done (D3 splash 2026-08-14)** · E1 pre-flight parse recorded — E2 flash unblocked pending human "yes" · G1–G3 done (M3.1/M3.2) — G4 kernel flash unblocked pending human "yes" · **H1 done 2026-08-14 (initramfs boots to shell, CI-verified; boot.img `e3125677` @ `f649d5a5`)** · H2/H3/H5/H6 research pack written (`docs/research/driver-bring-up-h2h3.md`) · I not started · **no image flashed yet**
 **Last evidence refresh:** 2026-08-12 (A2 rollback set: 4× dd images + TWRP System/Data backup on PC; C8 captures fixed; TWRP identified as 3.7.0_9-0-notnoelchannel)
 
 ---
@@ -333,12 +333,12 @@ Implements PRD FR-2, FR-3. This is what makes the image safe to hand to a human.
 - **Verify:** `git -C twrp log --oneline -- device/samsung/j1minilte/COPYING` shows no deletion.
 - [x] Done — 2026-08-11. `COPYING` (AGPL-3.0) preserved; README credits NotNoelChannel base + archived pmOS recipe reference.
 
-#### D3 — Splash and defaults *(optional polish — may be deferred past first flash)*
+#### D3 — Splash and defaults
 - **Depends on:** D2
 - **Do:** 480×800 custom boot splash; confirm default brightness 162 and MTP-on defaults.
 - **Accept:** Cosmetic only, and it must not increase the image beyond the C1 limit.
 - **Verify:** C1's size check still passes.
-- [ ] Done — deferred (optional). Image currently 11.34 MiB; headroom to C1 limit exists if added.
+- [x] Done — **2026-08-14.** 480×800 custom boot splash (`J105F / Samsung Galaxy J1 Mini / custom TWRP`, dark + Samsung-blue, version string bottom). TWRP 3.7.0_9 renders the boot splash from the **theme page** (`/twres/splash.xml` + `images/splashlogo.png`, 8-bit PNG — source-verified, not the legacy raw-RGB565 assumption). Implemented as a surgical post-build patch (`twrp` `634cb96c`): `tools/patch_splash.py` unpacks recovery.img, replaces exactly those two ramdisk files, repacks via `tools/pack_bootimg.py` with kernel/dt/cmdline/SEANDROID preserved + fail-closed verify + size gate. Locally round-tripped on the current artifact: VERIFY PASS, 11,874,304 B < 16 MiB. CI run `31801523361`. Splash generator committed at `tools/make-splash.py` (reproducible). Visual confirmation deferred to E2 (device).
 
 ---
 
