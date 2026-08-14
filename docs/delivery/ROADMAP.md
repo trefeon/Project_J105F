@@ -105,7 +105,8 @@ Block counts are 1024-byte units.
 
 - Nested `twrp` repo: **clean**, HEAD `0f7f3586` (16 MiB gate on top of branding `2d63e410`); CI green — runs `31469647748`, `31472573689`, `31474055688`, `31524994619`; final artifacts (run `31524994619` = HEAD): `recovery.img` 11.34 MiB (sha256 `799b5e10…`), `recovery.tar`, `recovery.tar.md5` (md5 `52067f65…`), SHA256SUMS + BUILD_INFO.txt + manifest-pinned.xml.
   > **2026-08-14 correction:** the flash bundle at `device/evidence/build-artifacts/twrp-j1minilte/` previously held the *first-green* image (`9869d726`, commit `dfccd4fb`) — pre-branding and pre-gate — and the Odin tar was built from it. Replaced with the gated HEAD artifact `799b5e10`; tar + md5 rebuilt. Prior SHA references in this §1 (e.g. `aa34d1d0…` under `final/`) refer to the pre-gate branding build and must not be flashed.
-- Nested `os/kernel` repo: **clean**, HEAD `d4b8e879` (kernel foundation); CI green — runs `31519306192`, `31520084805`; artifacts: `boot.img` 6.53 MiB (sha256 `a8603c2d…`), zImage, dt.img, initramfs, .config, SHA256SUMS, BUILD_INFO.txt.
+- Nested `os/kernel` repo: **clean**, HEAD `f31f090a` (kernel foundation + 16 MiB gate); CI green — runs `31519306192`, `31520084805`, `31524994372`; artifacts (gate-verified run `31524994372` = HEAD): `boot.img` 6.53 MiB (sha256 `671a576a…`), zImage, dt.img, initramfs, .config, SHA256SUMS, BUILD_INFO.txt.
+  > **2026-08-14 correction:** the kernel flash bundle was re-synced from the pre-gate run `31519306192` (boot.img `a8603c2d`) to the gate-verified HEAD run `31524994372` (boot.img `671a576a`). Kernel source is identical (top-3 commits are workflow-only); dt.img unchanged. Flash only `671a576a…`.
 - Parent repo: all docs committed (this ROADMAP included).
 - CI history on `twrp_j1minilte`: early runs `31421309135`, `31421517523`, `31421781959`, `31465251155` failed (root-caused one by one) → green since `31469647748`.
 

@@ -32,3 +32,5 @@ the git history, and CI run metadata on 2026-08-12.
 **Next actionable items:** A3 (heimdall PIT, phone in Download Mode — optional, `partitions.txt` already authoritative) → E2 flash of custom recovery (human "yes" required) → G4 kernel flash (human "yes" required).
 
 **2026-08-14 correction (C3/E1 artifacts):** the `twrp-j1minilte/` bundle (recovery.img + recovery.tar + recovery.tar.md5) was discovered to contain a **stale first-green image** — hash `9869d726`, run `31469647748`, commit `dfccd4fb`, **pre-branding** (`0_j1mini_custom` in ramdisk). Replaced with the gated HEAD artifact `799b5e10` (run `31524994619`, commit `0f7f3586`, branding `0_j105f-custom`); `recovery.tar` + `recovery.tar.md5` rebuilt from it (md5 `52067f65…`). `e1-flash-commands.md` corrected accordingly. Stock rollback images untouched.
+
+**2026-08-14 correction (G3/kernel bundle):** `kernel-m31/` flash bundle re-synced from pre-gate run `31519306192` (boot.img `a8603c2d`, commit `05c7b22a`) to the gate-verified HEAD run `31524994372` (boot.img `671a576a`, commit `f31f090a`). Kernel source identical (top-3 commits workflow-only); dt.img unchanged (`f29f3d90…`).
