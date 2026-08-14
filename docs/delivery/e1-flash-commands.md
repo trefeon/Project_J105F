@@ -21,7 +21,13 @@ Rollback images exist at `device/evidence/stock-backup/` (PC) and `/external_sd/
 checksummed in `device/evidence/stock-backup/CHECKSUMS.sha256` (committed).
 
 Image to flash: `device/evidence/build-artifacts/twrp-j1minilte/recovery.img`
-(11,890,688 B, sha256 `9869d726…` — under the 16 MiB gate; header pgsz 2048, offsets per ROADMAP §1).
+(11,890,688 B, sha256 `799b5e10…` — under the 16 MiB gate; header pgsz 2048, offsets per ROADMAP §1).
+Provenance: run `31524994619`, source commit `0f7f3586` (branding `0_j105f-custom` + 16 MiB gate).
+> **2026-08-14 correction:** this bundle previously held a stale first-green image (hash `9869d726`,
+> run `31469647748`, commit `dfccd4fb`) — **pre-branding** (`0_j1mini_custom`), and its Odin tar was
+> built from that same stale image. Replaced with the gated HEAD artifact `799b5e10`; `recovery.tar`
+> + `recovery.tar.md5` rebuilt from it (md5 `52067f65…`); `parsed-e1/` re-parsed from it (ramdisk now
+> 6,408,794 B). Do not flash any image whose SHA-256 is not `799b5e10…`.
 
 ## 1. Flash the custom recovery
 
@@ -33,7 +39,7 @@ $adb = "D:\github_repo\Project_J105F\tools\platform-tools\adb.exe"
 & $adb shell "dd if=/external_sd/recovery_new.img of=/dev/block/mmcblk0p21 bs=4096"
 # verify the flash read-back (optional but cheap):
 & $adb shell "dd if=/dev/block/mmcblk0p21 bs=4096 2>/dev/null | sha256sum"
-# must print: 9869d7268bd57bc37c5c4e1d3a51b0c84d4ee43e2ff621903eaa3837eb55c05a
+# must print: 799b5e106797bfaf0c9a00944fd3ba18834d6ec5226df684fe575dbf875c8dbc
 ```
 
 (Alternative GUI route: TWRP → Install → Install Image → select `recovery_new.img` → partition: **RECOVERY** → swipe.)

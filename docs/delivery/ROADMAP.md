@@ -103,7 +103,8 @@ Block counts are 1024-byte units.
 
 ### Repository state
 
-- Nested `twrp` repo: **clean**, HEAD `2d63e410` (branding final); CI green — runs `31469647748`, `31472573689`, `31474055688`; final artifacts: `recovery.img` 11.34 MiB (sha256 `aa34d1d0…`), `recovery.tar`, SHA256SUMS + BUILD_INFO.txt + manifest-pinned.xml.
+- Nested `twrp` repo: **clean**, HEAD `0f7f3586` (16 MiB gate on top of branding `2d63e410`); CI green — runs `31469647748`, `31472573689`, `31474055688`, `31524994619`; final artifacts (run `31524994619` = HEAD): `recovery.img` 11.34 MiB (sha256 `799b5e10…`), `recovery.tar`, `recovery.tar.md5` (md5 `52067f65…`), SHA256SUMS + BUILD_INFO.txt + manifest-pinned.xml.
+  > **2026-08-14 correction:** the flash bundle at `device/evidence/build-artifacts/twrp-j1minilte/` previously held the *first-green* image (`9869d726`, commit `dfccd4fb`) — pre-branding and pre-gate — and the Odin tar was built from it. Replaced with the gated HEAD artifact `799b5e10`; tar + md5 rebuilt. Prior SHA references in this §1 (e.g. `aa34d1d0…` under `final/`) refer to the pre-gate branding build and must not be flashed.
 - Nested `os/kernel` repo: **clean**, HEAD `d4b8e879` (kernel foundation); CI green — runs `31519306192`, `31520084805`; artifacts: `boot.img` 6.53 MiB (sha256 `a8603c2d…`), zImage, dt.img, initramfs, .config, SHA256SUMS, BUILD_INFO.txt.
 - Parent repo: all docs committed (this ROADMAP included).
 - CI history on `twrp_j1minilte`: early runs `31421309135`, `31421517523`, `31421781959`, `31465251155` failed (root-caused one by one) → green since `31469647748`.
@@ -307,7 +308,7 @@ Implements PRD FR-2, FR-3. This is what makes the image safe to hand to a human.
   form first and fall back. Document which Odin version was used for the eventual successful flash.
 - **Accept:** Both artifacts exist; the flash instructions name a specific Odin version.
 - **Verify:** `tar -tf recovery.tar` lists exactly `recovery.img`.
-- [x] Done — 2026-08-12. Plain `recovery.tar` (11,898,880 B) + `recovery.tar.md5` (tar with 32-char MD5 appended, delta exactly 32 B, re-hash `6ba01d34e4661059329b4750d5ba4ca3` matches; `tar -tf` lists exactly `recovery.img`). The remaining clause — "flash instructions name a specific Odin version" — is inherently device-dependent and stays OPEN until E2; release notes (F1) will name the winner per D-2.
+- [x] Done — 2026-08-12. Plain `recovery.tar` (11,898,880 B) + `recovery.tar.md5` (tar with 32-char MD5 appended, delta exactly 32 B, re-hash `6ba01d34e4661059329b4750d5ba4ca3` matches; `tar -tf` lists exactly `recovery.img`). **2026-08-14 correction:** the tar packaged the stale pre-branding image (`9869d726`); rebuilt from gated HEAD artifact `799b5e10` (run 31524994619), new md5 `52067f658c62a63cc689a0c77d513d94`. The remaining clause — "flash instructions name a specific Odin version" — is inherently device-dependent and stays OPEN until E2; release notes (F1) will name the winner per D-2.
 
 ---
 
@@ -354,7 +355,7 @@ C1 size check green · the human is physically present and has explicitly approv
   read both back.
 - **Accept:** Identity matches, header is sane, rollback command is verified correct.
 - **Verify:** `python tools/parse_bootimg.py <recovery.img>` output recorded in the log.
-- [ ] Done — pre-flight tooling ready (`tools/parse_bootimg.py` + kernel repo's `pack_bootimg.py`); local parse **recorded 2026-08-12** on the final image: pgsz 2048, kernel 5,146,640 B, ramdisk 6,408,655 B, DTB blob @ 0xb06800, 5× DTBs SP8835EB, sizes byte-identical to stock (`parsed-e1/`); **flash + rollback commands written side by side at `docs/delivery/e1-flash-commands.md` (2026-08-12)**; remaining: identity + partition assertions on the live device, then human walkthrough — unblocked now that A2 is done.
+- [ ] Done — pre-flight tooling ready (`tools/parse_bootimg.py` + kernel repo's `pack_bootimg.py`); local parse **recorded 2026-08-12** on the final image: pgsz 2048, kernel 5,146,640 B, ramdisk 6,408,655 B, DTB blob @ 0xb06800, 5× DTBs SP8835EB, sizes byte-identical to stock (`parsed-e1/`); **flash + rollback commands written side by side at `docs/delivery/e1-flash-commands.md` (2026-08-12, corrected 2026-08-14 to the gated HEAD image `799b5e10`)**; remaining: identity + partition assertions on the live device, then human walkthrough — unblocked now that A2 is done.
 
 #### E2 — Flash and first boot
 - **Depends on:** E1 + explicit human "yes"
