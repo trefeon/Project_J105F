@@ -4,7 +4,7 @@
 **Deliverable 1 (MVP):** a reproducible, self-branded TWRP recovery built from source committed in this project
 **Deliverable 2 (experimental):** a bootable postmarketOS/Alpine Linux port
 
-**Status:** A2 **DONE** (rollback set + evidence re-captured, 2026-08-12) · A1/A4/A4b done · A3 partial (heimdall PIT outstanding) · B1–B3 done · C1–C3 done (C3 incl. `recovery.tar.md5`) · D1–D2 done, D3 deferred · E1 pre-flight parse recorded — E2 flash unblocked pending human "yes" · G1–G3 done (M3.1/M3.2) — G4 kernel flash unblocked pending human "yes" · H/I not started · **no image flashed yet**
+**Status:** A2 **DONE** (rollback set + evidence re-captured, 2026-08-12) · A1/A4/A4b done · A3 partial (heimdall PIT outstanding) · B1–B3 done · C1–C3 done (C3 incl. `recovery.tar.md5`) · D1–D2 done, D3 deferred · E1 pre-flight parse recorded — E2 flash unblocked pending human "yes" · G1–G3 done (M3.1/M3.2) — G4 kernel flash unblocked pending human "yes" · **H1 done 2026-08-14 (initramfs boots to shell, CI-verified; boot.img `e3125677` @ `f649d5a5`)** · H2/H3/H5/H6 research pack written (`docs/research/driver-bring-up-h2h3.md`) · I not started · **no image flashed yet**
 **Last evidence refresh:** 2026-08-12 (A2 rollback set: 4× dd images + TWRP System/Data backup on PC; C8 captures fixed; TWRP identified as 3.7.0_9-0-notnoelchannel)
 
 ---
@@ -105,8 +105,8 @@ Block counts are 1024-byte units.
 
 - Nested `twrp` repo: **clean**, HEAD `0f7f3586` (16 MiB gate on top of branding `2d63e410`); CI green — runs `31469647748`, `31472573689`, `31474055688`, `31524994619`; final artifacts (run `31524994619` = HEAD): `recovery.img` 11.34 MiB (sha256 `799b5e10…`), `recovery.tar`, `recovery.tar.md5` (md5 `52067f65…`), SHA256SUMS + BUILD_INFO.txt + manifest-pinned.xml.
   > **2026-08-14 correction:** the flash bundle at `device/evidence/build-artifacts/twrp-j1minilte/` previously held the *first-green* image (`9869d726`, commit `dfccd4fb`) — pre-branding and pre-gate — and the Odin tar was built from it. Replaced with the gated HEAD artifact `799b5e10`; tar + md5 rebuilt. Prior SHA references in this §1 (e.g. `aa34d1d0…` under `final/`) refer to the pre-gate branding build and must not be flashed.
-- Nested `os/kernel` repo: **clean**, HEAD `f31f090a` (kernel foundation + 16 MiB gate); CI green — runs `31519306192`, `31520084805`, `31524994372`; artifacts (gate-verified run `31524994372` = HEAD): `boot.img` 6.53 MiB (sha256 `671a576a…`), zImage, dt.img, initramfs, .config, SHA256SUMS, BUILD_INFO.txt.
-  > **2026-08-14 correction:** the kernel flash bundle was re-synced from the pre-gate run `31519306192` (boot.img `a8603c2d`) to the gate-verified HEAD run `31524994372` (boot.img `671a576a`). Kernel source is identical (top-3 commits are workflow-only); dt.img unchanged. Flash only `671a576a…`.
+- Nested `os/kernel` repo: **clean**, HEAD `f649d5a5` (H1 initramfs: boots to shell + fail-closed initramfs CI verify + CMDLINE landmine removed); CI green — runs `31519306192`, `31520084805`, `31524994372`, `31799705308`; artifacts (gate-verified run `31799705308` = HEAD): `boot.img` 6.53 MiB (sha256 `e3125677…`), zImage, dt.img, ramdisk.cpio.gz (H1 debug shell), .config, SHA256SUMS, BUILD_INFO.txt.
+  > **2026-08-14 corrections:** (1) kernel flash bundle re-synced from the pre-gate run `31519306192` (boot.img `a8603c2d`) to the gate-verified run `31524994372` (boot.img `671a576a`, commit `f31f090a`). (2) **H1 (2026-08-14):** re-synced again to run `31799705308` (boot.img `e3125677`, commit `f649d5a5`) — the new boot.img carries the H1 debug initramfs (shell on serial ttyS1 + panel tty1, fail-closed verified in CI); zImage identical to the `671a576a` bundle's, dt.img unchanged. Flash only `e3125677…`.
 - Parent repo: all docs committed (this ROADMAP included).
 - CI history on `twrp_j1minilte`: early runs `31421309135`, `31421517523`, `31421781959`, `31465251155` failed (root-caused one by one) → green since `31469647748`.
 
@@ -470,10 +470,10 @@ diverge to `j1minilte`. Do not optimize before the first boot.
 
 ### Stage H — Linux userspace bring-up (experimental)
 
-**Status 2026-08-11:** NOT STARTED — blocked on G4 (first kernel boot). Each item independently: one change,
+**Status 2026-08-14:** H1 **done** (debug initramfs boots to shell — CI-verified, kernel repo `f649d5a5`). H2–H6 research/evidence pack committed (`docs/research/driver-bring-up-h2h3.md`): sprdfb color-swap + buffering patches verified to apply, MELFAS MCS8040L touch (driver + DTS binding already in tree), zram config gap (`CONFIG_ZRAM` missing), RNDIS options (android composite rndis in-tree; `CONFIG_USB_ETH` + `USB_ETH_RNDIS` recommended). Remaining H2–H11 are device-gated (need G4 flash + human). Each item independently: one change,
 one boot, one log, one verdict. Order is dependency-driven.
 
-- [ ] **H1** initramfs and early userspace → boots to a shell prompt
+- [x] **H1** initramfs and early userspace → boots to a shell prompt — **2026-08-14:** H1 debug initramfs committed (`os/kernel` `f649d5a5`): init mounts proc/sysfs/devtmpfs/devpts/tmpfs, writes a Gate-D boot-evidence log to the serial console, and boots interactive shells on serial `ttyS1` (PID 1) + panel `tty1` (background, `setsid -c`) when fbcon is up; busybox 1.36.1 static. CI fail-closed-verifies the initramfs (init present + `sh -n` + busybox static). Also stripped the stale vendor `CONFIG_CMDLINE` (`mem=128M`/`initrd=` landmine → `console=ttyS1,115200n8` only). Gate-verified run `31799705308`: boot.img 6,850,560 B (sha256 `e3125677…`), all checksums verified locally, bundle re-synced.
 - [ ] **H2** framebuffer/display → readable console, correct colors (the archived `sprdfb-fix-swapped-colors`
       and `sprdfb-check-for-buffering` patches address known SC8830 defects)
 - [ ] **H3** touch via `evtest /dev/input/event2` → events with correct 480×800 range
